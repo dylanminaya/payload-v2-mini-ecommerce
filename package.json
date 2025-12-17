@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.68.5",
+    "@payloadcms/db-mongodb": "3.68.5",
     "@payloadcms/email-nodemailer": "3.68.5",
     "@payloadcms/live-preview-react": "3.68.5",
     "@payloadcms/next": "3.68.5",
@@ -65,7 +66,7 @@
     "stripe": "18.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "@payloadcms/db-mongodb": "3.68.5"
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
