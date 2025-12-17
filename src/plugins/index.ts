@@ -87,6 +87,25 @@ export const plugins: Plugin[] = [
     },
     products: {
       productsCollectionOverride: ProductsCollection,
+      variants: {
+        variantsCollectionOverride: ({ defaultCollection }) => ({
+          ...defaultCollection,
+          fields: [
+            ...defaultCollection.fields,
+            {
+              name: 'planType',
+              type: 'select',
+              options: [
+                { label: 'Limited', value: 'limited' },
+                { label: 'Unlimited', value: 'unlimited' },
+              ],
+              admin: {
+                position: 'sidebar',
+              },
+            },
+          ],
+        }),
+      },
     },
   }),
 ]

@@ -16,6 +16,10 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      {
+        hostname: 'api.simlimites.com',
+        protocol: 'https',
+      },
     ],
   },
   reactStrictMode: true,

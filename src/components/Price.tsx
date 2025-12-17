@@ -46,7 +46,7 @@ export const Price = ({
   if (typeof amount === 'number') {
     return (
       <Element className={className} suppressHydrationWarning>
-        {formatCurrency(amount, { currency: currencyToUse })}
+        {formatCurrency(amount * 100, { currency: currencyToUse })}
       </Element>
     )
   }

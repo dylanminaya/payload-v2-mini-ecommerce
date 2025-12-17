@@ -14,24 +14,25 @@ import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
+import { Button } from '@/components/ui/button'
+import { Country, Product } from '@/payload-types'
+import { useCartUI } from '@/providers/CartUI'
 import { DeleteItemButton } from './DeleteItemButton'
 import { EditItemQuantityButton } from './EditItemQuantityButton'
 import { OpenCartButton } from './OpenCart'
-import { Button } from '@/components/ui/button'
-import { Product } from '@/payload-types'
 
 export function CartModal() {
   const { cart } = useCart()
-  const [isOpen, setIsOpen] = useState(false)
+  const { isCartOpen, setIsCartOpen } = useCartUI()
 
   const pathname = usePathname()
 
   useEffect(() => {
     // Close the cart modal when the pathname changes.
-    setIsOpen(false)
-  }, [pathname])
+    setIsCartOpen(false)
+  }, [pathname, setIsCartOpen])
 
   const totalQuantity = useMemo(() => {
     if (!cart || !cart.items || !cart.items.length) return undefined
@@ -39,7 +40,7 @@ export function CartModal() {
   }, [cart])
 
   return (
-    <Sheet onOpenChange={setIsOpen} open={isOpen}>
+    <Sheet onOpenChange={setIsCartOpen} open={isCartOpen}>
       <SheetTrigger asChild>
         <OpenCartButton quantity={totalQuantity} />
       </SheetTrigger>
@@ -81,6 +82,11 @@ export function CartModal() {
                   let price = product.priceInUSD
 
                   const isVariant = Boolean(variant) && typeof variant === 'object'
+                  const isLocal = product.esimType === 'local'
+                  const firstCountry = product.countries?.find((c): c is Country => typeof c === 'object')
+                  const productIcon = product.iconUrl as string | undefined
+                  const displayIcon = isLocal ? firstCountry?.flagUrl : productIcon
+                  const iconAlt = isLocal ? `${firstCountry?.name} flag` : product.title || 'Region icon'
 
                   if (isVariant) {
                     price = variant?.priceInUSD
@@ -123,6 +129,15 @@ export function CartModal() {
                                 height={94}
                                 src={image.url}
                                 width={94}
+                              />
+                            )}
+                            {displayIcon && (
+                              <Image
+                                src={displayIcon}
+                                alt={iconAlt}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-auto object-contain rounded-sm shadow-sm"
+                                width={32}
+                                height={32}
                               />
                             )}
                           </div>

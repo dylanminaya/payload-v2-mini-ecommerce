@@ -22,13 +22,30 @@ export function VariantSelector({ product }: { product: Product }) {
 
   return variantTypes?.map((type) => {
     if (!type || typeof type !== 'object') {
-      return <></>
+      return null
     }
 
-    const options = type.options?.docs
+    // Get all option IDs that are actually used by this product's variants
+    const usedOptionValues = new Set<string>()
+    variants?.forEach((variant) => {
+      if (typeof variant === 'object' && variant.options) {
+        variant.options.forEach((opt) => {
+          if (typeof opt === 'object' && opt.value) {
+            usedOptionValues.add(opt.value)
+          }
+        })
+      }
+    })
+
+    // Filter options to only show ones used by this product's variants
+    const allOptions = type.options?.docs
+    const options = allOptions?.filter((opt) => {
+      if (typeof opt !== 'object') return false
+      return usedOptionValues.has(opt.value)
+    })
 
     if (!options || !Array.isArray(options) || !options.length) {
-      return <></>
+      return null
     }
 
     return (
@@ -38,7 +55,7 @@ export function VariantSelector({ product }: { product: Product }) {
           <React.Fragment>
             {options?.map((option) => {
               if (!option || typeof option !== 'object') {
-                return <></>
+                return null
               }
 
               const optionID = option.id
@@ -55,23 +72,21 @@ export function VariantSelector({ product }: { product: Product }) {
               // if the option was clicked.
               optionSearchParams.set(optionKeyLowerCase, String(optionID))
 
-              const currentOptions = Array.from(optionSearchParams.values())
-
               let isAvailableForSale = true
 
-              // Find a matching variant
+              // Find a matching variant by comparing option values instead of IDs
+              // (handles case where variant options and displayed options are different records)
               if (variants) {
                 const matchingVariant = variants
                   .filter((variant) => typeof variant === 'object')
                   .find((variant) => {
                     if (!variant.options || !Array.isArray(variant.options)) return false
 
-                    // Check if all variant options match the current options in the URL
-                    return variant.options.every((variantOption) => {
-                      if (typeof variantOption !== 'object')
-                        return currentOptions.includes(String(variantOption))
-
-                      return currentOptions.includes(String(variantOption.id))
+                    // Check if any variant option matches the clicked option by value
+                    return variant.options.some((variantOption) => {
+                      if (typeof variantOption !== 'object') return false
+                      // Match by value field instead of ID
+                      return variantOption.value === option.value
                     })
                   })
 
@@ -96,10 +111,11 @@ export function VariantSelector({ product }: { product: Product }) {
 
               return (
                 <Button
-                  variant={'ghost'}
+                  variant={isActive ? 'default' : 'outline'}
                   aria-disabled={!isAvailableForSale}
-                  className={clsx('px-2', {
-                    'bg-primary/5 text-primary': isActive,
+                  className={clsx('px-4 py-2 transition-all', {
+                    'bg-primary': isActive,
+                    'bg-primary/10': !isAvailableForSale,
                   })}
                   disabled={!isAvailableForSale}
                   key={option.id}

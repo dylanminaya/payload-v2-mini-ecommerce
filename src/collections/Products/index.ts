@@ -1,7 +1,6 @@
 import { CallToAction } from '@/blocks/CallToAction/config'
 import { Content } from '@/blocks/Content/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
-import { slugField } from 'payload'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { CollectionOverride } from '@payloadcms/plugin-ecommerce/types'
 import {
@@ -18,7 +17,7 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import { DefaultDocumentIDType, Where } from 'payload'
+import { DefaultDocumentIDType, slugField, Where } from 'payload'
 
 export const ProductsCollection: CollectionOverride = ({ defaultCollection }) => ({
   ...defaultCollection,
@@ -52,9 +51,61 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
     priceInUSD: true,
     inventory: true,
     meta: true,
+    countries: {
+      name: true,
+      code: true,
+      flagUrl: true,
+      slug: true,
+    },
+    iconUrl: true,
+    esimType: true,
   },
   fields: [
-    { name: 'title', type: 'text', required: true },
+        {
+      name: 'title',
+      type: 'text',
+      required: true,
+      admin: {
+        components: {
+          Cell: '@/components/TitleWithIcon#TitleWithIcon',
+        },
+      },
+    },
+    {
+      name: 'iconUrl',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'External icon URL',
+      },
+    },
+    {
+      name: 'provider',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'eSIM provider name',
+      },
+    },
+    {
+      name: 'esimType',
+      type: 'select',
+      options: [
+        { label: 'Local', value: 'local' },
+        { label: 'Regional', value: 'regional' },
+        { label: 'Global', value: 'global' },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'coverage',
+      type: 'textarea',
+      admin: {
+        description: 'Network coverage details',
+      },
+    },
     {
       type: 'tabs',
       tabs: [
@@ -206,6 +257,16 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
       },
       hasMany: true,
       relationTo: 'categories',
+    },
+    {
+      name: 'countries',
+      type: 'relationship',
+      admin: {
+        position: 'sidebar',
+        sortOptions: 'name',
+      },
+      hasMany: true,
+      relationTo: 'countries',
     },
     slugField(),
   ],

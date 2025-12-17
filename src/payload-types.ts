@@ -75,6 +75,7 @@ export interface Config {
     users: User;
     pages: Page;
     categories: Category;
+    countries: Country;
     media: Media;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -108,6 +109,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -127,6 +129,7 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
+  fallbackLocale: null;
   globals: {
     header: Header;
     footer: Footer;
@@ -262,6 +265,19 @@ export interface Order {
 export interface Product {
   id: string;
   title: string;
+  /**
+   * External icon URL
+   */
+  iconUrl?: string | null;
+  /**
+   * eSIM provider name
+   */
+  provider?: string | null;
+  esimType?: ('local' | 'regional' | 'global') | null;
+  /**
+   * Network coverage details
+   */
+  coverage?: string | null;
   description?: {
     root: {
       type: string;
@@ -305,6 +321,7 @@ export interface Product {
     description?: string | null;
   };
   categories?: (string | Category)[] | null;
+  countries?: (string | Country)[] | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -885,10 +902,34 @@ export interface Variant {
   inventory?: number | null;
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;
+  planType?: ('limited' | 'unlimited') | null;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: string;
+  name: string;
+  /**
+   * ISO country code (e.g., US, GB, ES)
+   */
+  code: string;
+  /**
+   * URL to country flag image
+   */
+  flagUrl?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1068,6 +1109,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'countries';
+        value: string | Country;
       } | null)
     | ({
         relationTo: 'media';
@@ -1367,6 +1412,19 @@ export interface CategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  flagUrl?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -1564,6 +1622,7 @@ export interface VariantsSelect<T extends boolean = true> {
   inventory?: T;
   priceInUSDEnabled?: T;
   priceInUSD?: T;
+  planType?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1600,6 +1659,10 @@ export interface VariantOptionsSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
+  iconUrl?: T;
+  provider?: T;
+  esimType?: T;
+  coverage?: T;
   description?: T;
   gallery?:
     | T
@@ -1630,6 +1693,7 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
       };
   categories?: T;
+  countries?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;

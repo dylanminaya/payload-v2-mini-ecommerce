@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import type { Product, Variant } from '@/payload-types'
+import { useCartUI } from '@/providers/CartUI'
 
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 import clsx from 'clsx'
@@ -14,9 +15,10 @@ type Props = {
 
 export function AddToCart({ product }: Props) {
   const { addItem, cart, isLoading } = useCart()
+  const { openCart } = useCartUI()
   const searchParams = useSearchParams()
 
-  const variants = product.variants?.docs || []
+  const variants = useMemo(() => product.variants?.docs || [], [product.variants?.docs])
 
   const selectedVariant = useMemo<Variant | undefined>(() => {
     if (product.enableVariants && variants.length) {
@@ -46,9 +48,10 @@ export function AddToCart({ product }: Props) {
         variant: selectedVariant?.id ?? undefined,
       }).then(() => {
         toast.success('Item added to cart.')
+        openCart()
       })
     },
-    [addItem, product, selectedVariant],
+    [addItem, product, selectedVariant, openCart],
   )
 
   const disabled = useMemo<boolean>(() => {

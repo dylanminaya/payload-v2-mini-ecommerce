@@ -2,17 +2,16 @@ import type { Media, Product } from '@/payload-types'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { GridTileImage } from '@/components/Grid/tile'
-import { Gallery } from '@/components/product/Gallery'
 import { ProductDescription } from '@/components/product/ProductDescription'
+import { Button } from '@/components/ui/button'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { ChevronLeftIcon } from 'lucide-react'
+import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import React, { Suspense } from 'react'
-import { Button } from '@/components/ui/button'
-import { ChevronLeftIcon } from 'lucide-react'
-import { Metadata } from 'next'
+import { getPayload } from 'payload'
+import React from 'react'
 
 type Args = {
   params: Promise<{
@@ -37,15 +36,15 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
     description: product.meta?.description || '',
     openGraph: seoImage?.url
       ? {
-          images: [
-            {
-              alt: seoImage?.alt,
-              height: seoImage.height!,
-              url: seoImage?.url,
-              width: seoImage.width!,
-            },
-          ],
-        }
+        images: [
+          {
+            alt: seoImage?.alt,
+            height: seoImage.height!,
+            url: seoImage?.url,
+            width: seoImage.width!,
+          },
+        ],
+      }
       : null,
     robots: {
       follow: canIndex,
@@ -65,20 +64,12 @@ export default async function ProductPage({ params }: Args) {
 
   if (!product) return notFound()
 
-  const gallery =
-    product.gallery
-      ?.filter((item) => typeof item.image === 'object')
-      .map((item) => ({
-        ...item,
-        image: item.image as Media,
-      })) || []
-
   const metaImage = typeof product.meta?.image === 'object' ? product.meta?.image : undefined
   const hasStock = product.enableVariants
     ? product?.variants?.docs?.some((variant) => {
-        if (typeof variant !== 'object') return false
-        return variant.inventory && variant?.inventory > 0
-      })
+      if (typeof variant !== 'object') return false
+      return variant.inventory && variant?.inventory > 0
+    })
     : product.inventory! > 0
 
   let price = product.priceInUSD
@@ -109,6 +100,22 @@ export default async function ProductPage({ params }: Args) {
   const relatedProducts =
     product.relatedProducts?.filter((relatedProduct) => typeof relatedProduct === 'object') ?? []
 
+  // Determine back navigation based on esimType
+  const esimType = product.esimType as string | undefined
+  let backLink = '/'
+  let backLabel = 'All eSIMs'
+
+  if (esimType === 'local') {
+    backLink = '/?tab=local'
+    backLabel = 'Local eSIMs'
+  } else if (esimType === 'regional') {
+    backLink = '/?tab=regional'
+    backLabel = 'Regional eSIMs'
+  } else if (esimType === 'global') {
+    backLink = '/?tab=global'
+    backLabel = 'Global eSIMs'
+  }
+
   return (
     <React.Fragment>
       <script
@@ -119,25 +126,13 @@ export default async function ProductPage({ params }: Args) {
       />
       <div className="container pt-8 pb-8">
         <Button asChild variant="ghost" className="mb-4">
-          <Link href="/shop">
+          <Link href={backLink}>
             <ChevronLeftIcon />
-            All products
+            {backLabel}
           </Link>
         </Button>
-        <div className="flex flex-col gap-12 rounded-lg border p-8 md:py-12 lg:flex-row lg:gap-8 bg-primary-foreground">
-          <div className="h-full w-full basis-full lg:basis-1/2">
-            <Suspense
-              fallback={
-                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
-              }
-            >
-              {Boolean(gallery?.length) && <Gallery gallery={gallery} />}
-            </Suspense>
-          </div>
-
-          <div className="basis-full lg:basis-1/2">
-            <ProductDescription product={product} />
-          </div>
+        <div className="rounded-lg border p-8 md:py-12 bg-primary-foreground">
+          <ProductDescription product={product} />
         </div>
       </div>
 
@@ -210,6 +205,11 @@ const queryProductBySlug = async ({ slug }: { slug: string }) => {
         priceInUSD: true,
         inventory: true,
         options: true,
+      },
+      countries: {
+        name: true,
+        slug: true,
+        flagUrl: true,
       },
     },
   })
