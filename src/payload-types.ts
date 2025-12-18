@@ -275,6 +275,10 @@ export interface Product {
   provider?: string | null;
   esimType?: ('local' | 'regional' | 'global') | null;
   /**
+   * Network technology type
+   */
+  networkType?: ('5G' | 'LTE' | '4G' | '3G') | null;
+  /**
    * Network coverage details
    */
   coverage?: string | null;
@@ -1662,6 +1666,7 @@ export interface ProductsSelect<T extends boolean = true> {
   iconUrl?: T;
   provider?: T;
   esimType?: T;
+  networkType?: T;
   coverage?: T;
   description?: T;
   gallery?:

@@ -59,6 +59,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
     },
     iconUrl: true,
     esimType: true,
+    networkType: true,
   },
   fields: [
         {
@@ -97,6 +98,20 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
       ],
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'networkType',
+      type: 'select',
+      options: [
+        { label: '5G', value: '5G' },
+        { label: 'LTE', value: 'LTE' },
+        { label: '4G', value: '4G' },
+        { label: '3G', value: '3G' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Network technology type',
       },
     },
     {

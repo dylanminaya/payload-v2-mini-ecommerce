@@ -2,13 +2,13 @@
 import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
 import { CMSLink } from '@/components/Link'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 import type { Header } from 'src/payload-types'
 import { MobileMenu } from './MobileMenu'
 
-import { LogoIcon } from '@/components/icons/logo'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { cn } from '@/utilities/cn'
 import { usePathname } from 'next/navigation'
@@ -32,7 +32,14 @@ export function HeaderClient({ header }: Props) {
         <div className="flex w-full items-end justify-between">
           <div className="flex w-full items-end gap-6 md:w-1/3">
             <Link className="flex w-full items-center justify-center pt-4 pb-4 md:w-auto" href="/">
-              <LogoIcon className="w-6 h-auto" />
+              <Image
+                src="/logo.svg"
+                alt="eSIM Connect"
+                width={200}
+                height={60}
+                className="h-10 w-auto"
+                priority
+              />
             </Link>
             {menu.length ? (
               <ul className="hidden gap-4 text-sm md:flex md:items-center">

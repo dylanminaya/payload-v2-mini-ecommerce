@@ -1,13 +1,18 @@
 import type { Metadata } from 'next'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import React, { Fragment } from 'react'
+import React from 'react'
 
-import { CheckoutPage } from '@/components/checkout/CheckoutPage'
+// Original Stripe checkout - commented out for demo
+// import { CheckoutPage } from '@/components/checkout/CheckoutPage'
+
+// Simple checkout with fake payment form
+import { SimpleCheckoutPage } from '@/components/checkout/SimpleCheckoutPage'
 
 export default function Checkout() {
   return (
     <div className="container min-h-[90vh] flex">
+      {/* Original Stripe checkout - commented out for demo
       {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
         <div>
           <Fragment>
@@ -31,10 +36,12 @@ export default function Checkout() {
           </Fragment>
         </div>
       )}
+      <CheckoutPage />
+      */}
 
       <h1 className="sr-only">Checkout</h1>
 
-      <CheckoutPage />
+      <SimpleCheckoutPage />
     </div>
   )
 }
