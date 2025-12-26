@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
+import { createOrder } from '@/app/[locale]/checkout/actions'
 import { OrderConfirmation } from '@/components/checkout/OrderConfirmation'
 import { FakePaymentForm } from '@/components/forms/FakePaymentForm'
 import { FormItem } from '@/components/forms/FormItem'
@@ -29,46 +30,81 @@ export const SimpleCheckoutPage: React.FC = () => {
   const [emailConfirmed, setEmailConfirmed] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderItems, setOrderItems] = useState<any[]>([])
+  const [orderId, setOrderId] = useState<string | null>(null)
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
   const canProceedToPayment = Boolean(user || (email && emailConfirmed))
 
   const handlePaymentSuccess = async () => {
-    // Store order items before clearing cart
-    const items = cart?.items?.map((item) => {
-      if (typeof item.product === 'object' && item.product) {
-        const product = item.product
-        const isLocal = product.esimType === 'local'
-        const firstCountry = product.countries?.find(
-          (c): c is Country => typeof c === 'object'
-        )
-        return {
-          title: product.title,
-          provider: product.provider,
-          region: isLocal ? firstCountry?.name : product.title,
-          iconUrl: isLocal ? firstCountry?.flagUrl : product.iconUrl,
-          esimType: product.esimType,
-          networkType: product.networkType,
-          variant: item.variant,
+    try {
+      // Prepare order items for database
+      const orderItemsForDB = cart?.items
+        ?.map((item) => {
+          if (typeof item.product === 'object' && item.product) {
+            return {
+              product: item.product.id,
+              variant: typeof item.variant === 'object' ? item.variant?.id || null : item.variant || null,
+              quantity: item.quantity || 1,
+            }
+          }
+          return null
+        })
+        .filter((item): item is { product: string; variant: string | null; quantity: number } => item !== null) || []
+
+      // Store order items for display before clearing cart
+      const displayItems = cart?.items?.map((item) => {
+        if (typeof item.product === 'object' && item.product) {
+          const product = item.product
+          const isLocal = product.esimType === 'local'
+          const firstCountry = product.countries?.find(
+            (c): c is Country => typeof c === 'object'
+          )
+          return {
+            title: product.title,
+            provider: product.provider,
+            region: isLocal ? firstCountry?.name : product.title,
+            iconUrl: isLocal ? firstCountry?.flagUrl : product.iconUrl,
+            esimType: product.esimType,
+            networkType: product.networkType,
+            variant: item.variant,
+          }
         }
+        return null
+      }).filter(Boolean) || []
+
+      // Create the order in the database
+      const result = await createOrder({
+        items: orderItemsForDB,
+        customer: user?.id || null,
+        customerEmail: user?.email || email,
+        amount: cart?.subtotal || 0,
+        currency: 'USD',
+      })
+
+      if (result.success && result.orderId) {
+        setOrderId(result.orderId)
+        setOrderItems(displayItems)
+
+        // Clear the cart
+        await clearCart()
+
+        // Move to confirmation step
+        setStep('confirmation')
+      } else {
+        console.error('Failed to create order:', result.error)
+        alert('Failed to create order. Please try again.')
       }
-      return null
-    }).filter(Boolean) || []
-
-    setOrderItems(items)
-
-    // Clear the cart
-    await clearCart()
-
-    // Move to confirmation step
-    setStep('confirmation')
+    } catch (error) {
+      console.error('Error in handlePaymentSuccess:', error)
+      alert('An error occurred while processing your order. Please try again.')
+    }
   }
 
   // Show confirmation page
   if (step === 'confirmation') {
     return (
       <div className="container">
-        <OrderConfirmation orderItems={orderItems} />
+        <OrderConfirmation orderItems={orderItems} orderId={orderId} />
       </div>
     )
   }

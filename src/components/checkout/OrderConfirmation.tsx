@@ -33,6 +33,7 @@ interface OrderItem {
 interface OrderConfirmationProps {
   orderItems: OrderItem[]
   orderNumber?: string
+  orderId?: string | null
 }
 
 // Placeholder QR Code component
@@ -118,6 +119,7 @@ const PlaceholderQRCode: React.FC = () => {
 
 export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
   orderItems,
+  orderId,
 }) => {
   const t = useTranslations()
 
@@ -172,6 +174,17 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             <span className="font-medium text-foreground">{firstItem?.title}</span>{' '}
             {t('orderConfirmation.isReady')}
           </p>
+          {orderId && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Order ID:{' '}
+              <Link
+                href={`/orders/${orderId}`}
+                className="font-mono font-medium text-foreground hover:underline"
+              >
+                {orderId}
+              </Link>
+            </p>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
