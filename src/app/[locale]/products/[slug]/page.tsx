@@ -4,11 +4,12 @@ import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { GridTileImage } from '@/components/Grid/tile'
 import { ProductDescription } from '@/components/product/ProductDescription'
 import { Button } from '@/components/ui/button'
+import { type Locale } from '@/i18n'
 import configPromise from '@payload-config'
 import { ChevronLeftIcon } from 'lucide-react'
 import { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
+import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
@@ -16,7 +17,7 @@ import React from 'react'
 
 type Args = {
   params: Promise<{
-    locale: string
+    locale: Locale
     slug: string
   }>
 }
@@ -182,7 +183,7 @@ async function RelatedProducts({ locale, products }: { locale: string; products:
   )
 }
 
-const queryProductBySlug = async ({ slug, locale }: { slug: string; locale: string }) => {
+const queryProductBySlug = async ({ slug, locale }: { slug: string; locale: Locale }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
