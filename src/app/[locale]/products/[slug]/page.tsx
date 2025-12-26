@@ -8,6 +8,7 @@ import configPromise from '@payload-config'
 import { ChevronLeftIcon } from 'lucide-react'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
@@ -15,13 +16,14 @@ import React from 'react'
 
 type Args = {
   params: Promise<{
+    locale: string
     slug: string
   }>
 }
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
-  const { slug } = await params
-  const product = await queryProductBySlug({ slug })
+  const { slug, locale } = await params
+  const product = await queryProductBySlug({ slug, locale })
 
   if (!product) return notFound()
 
@@ -59,8 +61,9 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
 }
 
 export default async function ProductPage({ params }: Args) {
-  const { slug } = await params
-  const product = await queryProductBySlug({ slug })
+  const { slug, locale } = await params
+  const t = await getTranslations()
+  const product = await queryProductBySlug({ slug, locale })
 
   if (!product) return notFound()
 
@@ -102,18 +105,18 @@ export default async function ProductPage({ params }: Args) {
 
   // Determine back navigation based on esimType
   const esimType = product.esimType as string | undefined
-  let backLink = '/'
-  let backLabel = 'All eSIMs'
+  let backLink = `/${locale}`
+  let backLabel = t('product.allEsims')
 
   if (esimType === 'local') {
-    backLink = '/?tab=local'
-    backLabel = 'Local eSIMs'
+    backLink = `/${locale}/?tab=local`
+    backLabel = t('product.localEsims')
   } else if (esimType === 'regional') {
-    backLink = '/?tab=regional'
-    backLabel = 'Regional eSIMs'
+    backLink = `/${locale}/?tab=regional`
+    backLabel = t('product.regionalEsims')
   } else if (esimType === 'global') {
-    backLink = '/?tab=global'
-    backLabel = 'Global eSIMs'
+    backLink = `/${locale}/?tab=global`
+    backLabel = t('product.globalEsims')
   }
 
   return (
@@ -140,7 +143,7 @@ export default async function ProductPage({ params }: Args) {
 
       {relatedProducts.length ? (
         <div className="container">
-          <RelatedProducts products={relatedProducts as Product[]} />
+          <RelatedProducts locale={locale} products={relatedProducts as Product[]} />
         </div>
       ) : (
         <></>
@@ -149,19 +152,21 @@ export default async function ProductPage({ params }: Args) {
   )
 }
 
-function RelatedProducts({ products }: { products: Product[] }) {
+async function RelatedProducts({ locale, products }: { locale: string; products: Product[] }) {
   if (!products.length) return null
+
+  const t = await getTranslations()
 
   return (
     <div className="py-8">
-      <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
+      <h2 className="mb-4 text-2xl font-bold">{t('product.relatedProducts')}</h2>
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {products.map((product) => (
           <li
             className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
             key={product.id}
           >
-            <Link className="relative h-full w-full" href={`/products/${product.slug}`}>
+            <Link className="relative h-full w-full" href={`/${locale}/products/${product.slug}`}>
               <GridTileImage
                 label={{
                   amount: product.priceInUSD!,
@@ -177,7 +182,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
   )
 }
 
-const queryProductBySlug = async ({ slug }: { slug: string }) => {
+const queryProductBySlug = async ({ slug, locale }: { slug: string; locale: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -187,6 +192,7 @@ const queryProductBySlug = async ({ slug }: { slug: string }) => {
     depth: 3,
     draft,
     limit: 1,
+    locale,
     overrideAccess: draft,
     pagination: false,
     where: {

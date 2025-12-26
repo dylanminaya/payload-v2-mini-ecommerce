@@ -1,0 +1,172 @@
+{
+  "common": {
+    "or": "o",
+    "total": "Total",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "submit": "Enviar",
+    "edit": "Editar",
+    "remove": "Eliminar",
+    "select": "Seleccionar",
+    "tryAgain": "Intentar de nuevo",
+    "continueShopping": "¿Continuar comprando?",
+    "backToCountries": "Volver a todos los países"
+  },
+  "cart": {
+    "title": "Mi Carrito",
+    "description": "Administra tu carrito aquí, agrega artículos para ver el total.",
+    "empty": "Tu carrito está vacío.",
+    "openCart": "Carrito",
+    "addToCart": "Agregar al Carrito",
+    "addedToCart": "Artículo agregado al carrito.",
+    "proceedToCheckout": "Proceder al Pago",
+    "quantity": "x"
+  },
+  "checkout": {
+    "contact": "Contacto",
+    "payment": "Pago",
+    "address": "Dirección",
+    "addresses": "Direcciones",
+    "shippingAddress": "Dirección de envío",
+    "yourCart": "Tu carrito",
+    "processing": "Procesando tu pago...",
+    "login": "Iniciar sesión",
+    "createAccount": "crear una cuenta",
+    "notYou": "¿No eres tú?",
+    "logout": "Cerrar sesión",
+    "guestCheckout": "Ingresa tu correo para continuar como invitado.",
+    "emailLabel": "Correo Electrónico",
+    "continueAsGuest": "Continuar como invitado",
+    "editEmail": "Editar correo",
+    "goToPayment": "Ir al pago",
+    "shippingSameAsBilling": "El envío es igual a la facturación",
+    "selectShippingAddress": "Por favor selecciona una dirección de envío.",
+    "selectAddressDescription": "Por favor selecciona o agrega tus direcciones de envío y facturación.",
+    "noAddresses": "No se encontraron direcciones. Por favor agrega una dirección.",
+    "selectAnAddress": "Seleccionar una dirección",
+    "cancelPayment": "Cancelar pago",
+    "errors": {
+      "paymentError": "Ocurrió un error al iniciar el pago.",
+      "outOfStock": "Uno o más artículos en tu carrito están agotados.",
+      "somethingWrong": "Algo salió mal.",
+      "confirmOrderError": "Error al confirmar el pedido: ",
+      "submitPaymentError": "Error al enviar el pago: ",
+      "errorPrefix": "Error: "
+    }
+  },
+  "payment": {
+    "securePayment": "Pago seguro (Modo demo)",
+    "cardholderName": "Nombre del Titular",
+    "cardNumber": "Número de Tarjeta",
+    "expiryDate": "Fecha de Vencimiento",
+    "cvv": "CVV",
+    "payButton": "Pagar {amount}",
+    "payNow": "Pagar ahora",
+    "processing": "Procesando...",
+    "loading": "Cargando...",
+    "disclaimer": "Este es un formulario de pago de demostración. No se realizarán cargos reales.",
+    "placeholders": {
+      "name": "Juan Pérez",
+      "card": "4242 4242 4242 4242",
+      "expiry": "MM/AA",
+      "cvv": "123"
+    },
+    "validation": {
+      "nameRequired": "El nombre del titular es requerido",
+      "cardRequired": "Se requiere un número de tarjeta válido",
+      "expiryRequired": "Se requiere una fecha de vencimiento válida",
+      "cvvRequired": "Se requiere un CVV válido"
+    }
+  },
+  "orderConfirmation": {
+    "title": "Pedido Confirmado. Activa tu eSIM.",
+    "activateEsim": "Activar eSIM",
+    "validFor": "Válido para 1 activación",
+    "your": "Tu",
+    "isReady": "está listo. Escanea el código QR a continuación o ingresa los detalles manualmente para activar tu plan de inmediato.",
+    "increaseBrightness": "Aumenta el brillo de la pantalla para escanear más fácilmente.",
+    "howToInstall": "Cómo instalar",
+    "scanCode": "Escanea el código a la izquierda.",
+    "planDetails": "Detalles del Plan",
+    "network": "Red",
+    "region": "Región",
+    "dataPlan": "Plan de Datos",
+    "validity": "Validez",
+    "iccid": "ICCID",
+    "troubleActivating": "¿Problemas para activar? Visita Soporte",
+    "sendToEmail": "Enviar por Correo",
+    "downloadQr": "Descargar Código QR",
+    "continueShopping": "Continuar Comprando",
+    "installStep1": "Ve a {strong1}Ajustes > Datos Móviles > Agregar eSIM{strong2} en tu dispositivo.",
+    "installStep2": "Selecciona {strong1}\"Usar Código QR\"{strong2} cuando se te solicite.",
+    "installStep3": "Escanea el código a la izquierda.",
+    "iccidCopied": "ICCID copiado al portapapeles",
+    "detailsSent": "Detalles de eSIM enviados a tu correo",
+    "qrDownloaded": "Código QR descargado"
+  },
+  "forms": {
+    "address": {
+      "title": "Título",
+      "firstName": "Nombre*",
+      "lastName": "Apellido*",
+      "phone": "Teléfono",
+      "company": "Empresa",
+      "addressLine1": "Dirección línea 1*",
+      "addressLine2": "Dirección línea 2",
+      "city": "Ciudad*",
+      "state": "Estado",
+      "zipCode": "Código Postal*",
+      "country": "País*",
+      "countryPlaceholder": "País",
+      "validation": {
+        "firstNameRequired": "El nombre es requerido.",
+        "lastNameRequired": "El apellido es requerido.",
+        "addressRequired": "La dirección línea 1 es requerida.",
+        "cityRequired": "La ciudad es requerida.",
+        "postalCodeRequired": "El código postal es requerido.",
+        "countryRequired": "El país es requerido."
+      }
+    },
+    "createAddress": {
+      "buttonText": "Agregar una nueva dirección",
+      "title": "Agregar una nueva dirección",
+      "description": "Esta dirección se conectará a tu cuenta."
+    }
+  },
+  "product": {
+    "outOfStock": "Agotado",
+    "outOfStockSuffix": " (Agotado)",
+    "stockRemaining": "Solo quedan {count} en stock",
+    "allEsims": "Todos los eSIMs",
+    "localEsims": "eSIMs Locales",
+    "regionalEsims": "eSIMs Regionales",
+    "globalEsims": "eSIMs Globales",
+    "relatedProducts": "Productos Relacionados",
+    "coverage": "Cobertura",
+    "type": "Tipo",
+    "networkCoverage": "Cobertura de Red",
+    "selectPlan": "Seleccionar Plan",
+    "buyNow": "Comprar Ahora"
+  },
+  "home": {
+    "title": "Explorar eSIMs",
+    "searchPlaceholder": "Buscar un país...",
+    "tabs": {
+      "local": "Local",
+      "regional": "Regional",
+      "global": "Global"
+    },
+    "descriptions": {
+      "local": "Planes eSIM para un solo país",
+      "regional": "Planes eSIM que cubren múltiples países en una región",
+      "global": "Planes eSIM con cobertura mundial"
+    },
+    "showing": "Mostrando",
+    "for": "para",
+    "results": "resultados",
+    "result": "resultado",
+    "noResultsMatch": "No hay resultados que coincidan con",
+    "selectOption": "Selecciona una opción para ver los planes eSIM disponibles",
+    "noPlansAvailable": "No hay planes {tab} disponibles aún."
+  }
+}

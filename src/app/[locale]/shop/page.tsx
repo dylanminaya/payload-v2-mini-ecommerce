@@ -12,16 +12,19 @@ export const metadata = {
 type SearchParams = { [key: string]: string | string[] | undefined }
 
 type Props = {
+  params: Promise<{ locale: string }>
   searchParams: Promise<SearchParams>
 }
 
-export default async function ShopPage({ searchParams }: Props) {
+export default async function ShopPage({ params, searchParams }: Props) {
+  const { locale } = await params
   const { q: searchValue, sort, category } = await searchParams
   const payload = await getPayload({ config: configPromise })
 
   const products = await payload.find({
     collection: 'products',
     draft: false,
+    locale,
     overrideAccess: false,
     select: {
       title: true,
@@ -93,7 +96,7 @@ export default async function ShopPage({ searchParams }: Props) {
       {products?.docs.length > 0 ? (
         <Grid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.docs.map((product) => {
-            return <ProductGridItem key={product.id} product={product} />
+            return <ProductGridItem key={product.id} locale={locale} product={product} />
           })}
         </Grid>
       ) : null}

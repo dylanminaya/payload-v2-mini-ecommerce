@@ -1,4 +1,7 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
 
 export function OpenCartButton({
   quantity,
@@ -6,6 +9,8 @@ export function OpenCartButton({
 }: {
   quantity?: number
 }) {
+  const t = useTranslations()
+
   return (
     <Button
       variant="nav"
@@ -13,7 +18,7 @@ export function OpenCartButton({
       className="navLink relative items-end hover:cursor-pointer"
       {...rest}
     >
-      <span>Cart</span>
+      <span>{t('cart.openCart')}</span>
 
       {quantity ? (
         <>

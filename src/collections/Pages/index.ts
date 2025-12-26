@@ -54,6 +54,7 @@ export const Pages: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'publishedOn',
@@ -98,6 +99,7 @@ export const Pages: CollectionConfig = {
                 FormBlock,
               ],
               required: true,
+              localized: true,
             },
           ],
           label: 'Content',

@@ -1,0 +1,172 @@
+{
+  "common": {
+    "or": "or",
+    "total": "Total",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "submit": "Submit",
+    "edit": "Edit",
+    "remove": "Remove",
+    "select": "Select",
+    "tryAgain": "Try again",
+    "continueShopping": "Continue shopping?",
+    "backToCountries": "Back to all countries"
+  },
+  "cart": {
+    "title": "My Cart",
+    "description": "Manage your cart here, add items to view the total.",
+    "empty": "Your cart is empty.",
+    "openCart": "Cart",
+    "addToCart": "Add To Cart",
+    "addedToCart": "Item added to cart.",
+    "proceedToCheckout": "Proceed to Checkout",
+    "quantity": "x"
+  },
+  "checkout": {
+    "contact": "Contact",
+    "payment": "Payment",
+    "address": "Address",
+    "addresses": "Addresses",
+    "shippingAddress": "Shipping address",
+    "yourCart": "Your cart",
+    "processing": "Processing your payment...",
+    "login": "Log in",
+    "createAccount": "create an account",
+    "notYou": "Not you?",
+    "logout": "Log out",
+    "guestCheckout": "Enter your email to checkout as a guest.",
+    "emailLabel": "Email Address",
+    "continueAsGuest": "Continue as guest",
+    "editEmail": "Edit email",
+    "goToPayment": "Go to payment",
+    "shippingSameAsBilling": "Shipping is the same as billing",
+    "selectShippingAddress": "Please select a shipping address.",
+    "selectAddressDescription": "Please select or add your shipping and billing addresses.",
+    "noAddresses": "No addresses found. Please add an address.",
+    "selectAnAddress": "Select an address",
+    "cancelPayment": "Cancel payment",
+    "errors": {
+      "paymentError": "An error occurred while initiating payment.",
+      "outOfStock": "One or more items in your cart are out of stock.",
+      "somethingWrong": "Something went wrong.",
+      "confirmOrderError": "Error while confirming order: ",
+      "submitPaymentError": "Error while submitting payment: ",
+      "errorPrefix": "Error: "
+    }
+  },
+  "payment": {
+    "securePayment": "Secure payment (Demo mode)",
+    "cardholderName": "Cardholder Name",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "payButton": "Pay {amount}",
+    "payNow": "Pay now",
+    "processing": "Processing...",
+    "loading": "Loading...",
+    "disclaimer": "This is a demo payment form. No real charges will be made.",
+    "placeholders": {
+      "name": "John Doe",
+      "card": "4242 4242 4242 4242",
+      "expiry": "MM/YY",
+      "cvv": "123"
+    },
+    "validation": {
+      "nameRequired": "Cardholder name is required",
+      "cardRequired": "Valid card number is required",
+      "expiryRequired": "Valid expiry date is required",
+      "cvvRequired": "Valid CVV is required"
+    }
+  },
+  "orderConfirmation": {
+    "title": "Order Confirmed. Activate your eSIM.",
+    "activateEsim": "Activate eSIM",
+    "validFor": "Valid for 1 activation",
+    "your": "Your",
+    "isReady": "is ready. Scan the QR code below or enter details manually to activate your plan immediately.",
+    "increaseBrightness": "Increase screen brightness for easier scanning.",
+    "howToInstall": "How to install",
+    "scanCode": "Scan the code to the left.",
+    "planDetails": "Plan Details",
+    "network": "Network",
+    "region": "Region",
+    "dataPlan": "Data Plan",
+    "validity": "Validity",
+    "iccid": "ICCID",
+    "troubleActivating": "Trouble activating? Visit Support",
+    "sendToEmail": "Send to Email",
+    "downloadQr": "Download QR Code",
+    "continueShopping": "Continue Shopping",
+    "installStep1": "Go to {strong1}Settings > Mobile Data > Add eSIM{strong2} on your device.",
+    "installStep2": "Select {strong1}\"Use QR Code\"{strong2} when prompted.",
+    "installStep3": "Scan the code to the left.",
+    "iccidCopied": "ICCID copied to clipboard",
+    "detailsSent": "eSIM details sent to your email",
+    "qrDownloaded": "QR Code downloaded"
+  },
+  "forms": {
+    "address": {
+      "title": "Title",
+      "firstName": "First name*",
+      "lastName": "Last name*",
+      "phone": "Phone",
+      "company": "Company",
+      "addressLine1": "Address line 1*",
+      "addressLine2": "Address line 2",
+      "city": "City*",
+      "state": "State",
+      "zipCode": "Zip Code*",
+      "country": "Country*",
+      "countryPlaceholder": "Country",
+      "validation": {
+        "firstNameRequired": "First name is required.",
+        "lastNameRequired": "Last name is required.",
+        "addressRequired": "Address line 1 is required.",
+        "cityRequired": "City is required.",
+        "postalCodeRequired": "Postal code is required.",
+        "countryRequired": "Country is required."
+      }
+    },
+    "createAddress": {
+      "buttonText": "Add a new address",
+      "title": "Add a new address",
+      "description": "This address will be connected to your account."
+    }
+  },
+  "product": {
+    "outOfStock": "Out of stock",
+    "outOfStockSuffix": " (Out of Stock)",
+    "stockRemaining": "Only {count} left in stock",
+    "allEsims": "All eSIMs",
+    "localEsims": "Local eSIMs",
+    "regionalEsims": "Regional eSIMs",
+    "globalEsims": "Global eSIMs",
+    "relatedProducts": "Related Products",
+    "coverage": "Coverage",
+    "type": "Type",
+    "networkCoverage": "Network Coverage",
+    "selectPlan": "Select Plan",
+    "buyNow": "Buy Now"
+  },
+  "home": {
+    "title": "Browse eSIMs",
+    "searchPlaceholder": "Search for a country...",
+    "tabs": {
+      "local": "Local",
+      "regional": "Regional",
+      "global": "Global"
+    },
+    "descriptions": {
+      "local": "eSIM plans for a single country",
+      "regional": "eSIM plans that cover multiple countries in a region",
+      "global": "eSIM plans with worldwide coverage"
+    },
+    "showing": "Showing",
+    "for": "for",
+    "results": "results",
+    "result": "result",
+    "noResultsMatch": "There are no results that match",
+    "selectOption": "Select an option to see available eSIM plans",
+    "noPlansAvailable": "No {tab} plans available yet."
+  }
+}

@@ -1,12 +1,14 @@
-import { Grid } from '@/components/Grid'
 import { CountrySearch } from '@/components/CountrySearch'
+import { Grid } from '@/components/Grid'
 import { Tabs } from '@/components/ui/tabs'
+import { type Locale } from '@/i18n'
 import type { Country, Product } from '@/payload-types'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { Suspense } from 'react'
+import { getPayload } from 'payload'
+import { Suspense } from 'react'
 
 export const metadata = {
   description: 'Browse eSIMs by country - Find the perfect data plan for your travels',
@@ -16,30 +18,34 @@ export const metadata = {
 type SearchParams = { [key: string]: string | string[] | undefined }
 
 type Props = {
+  params: Promise<{ locale: Locale }>
   searchParams: Promise<SearchParams>
 }
 
-const tabs = [
-  { label: 'Local', value: 'local' },
-  { label: 'Regional', value: 'regional' },
-  { label: 'Global', value: 'global' },
-]
-
-const tabDescriptions: Record<string, string> = {
-  local: 'eSIM plans for a single country',
-  regional: 'eSIM plans that cover multiple countries in a region',
-  global: 'eSIM plans with worldwide coverage',
-}
-
-export default async function HomePage({ searchParams }: Props) {
+export default async function HomePage({ params, searchParams }: Props) {
+  const { locale } = await params
   const { q: searchValue, tab = 'local' } = await searchParams
   const currentTab = Array.isArray(tab) ? tab[0] : tab
+  const t = await getTranslations()
   const payload = await getPayload({ config: configPromise })
+
+  const tabs = [
+    { label: t('home.tabs.local'), value: 'local' },
+    { label: t('home.tabs.regional'), value: 'regional' },
+    { label: t('home.tabs.global'), value: 'global' },
+  ]
+
+  const tabDescriptions: Record<string, string> = {
+    local: t('home.descriptions.local'),
+    regional: t('home.descriptions.regional'),
+    global: t('home.descriptions.global'),
+  }
 
   // Query products filtered by esimType
   const products = await payload.find({
     collection: 'products',
     limit: 1000,
+    locale,
     where: {
       and: [
         {
@@ -106,11 +112,11 @@ export default async function HomePage({ searchParams }: Props) {
   }
 
   const itemCount = isLocal ? localCountries.length : regionalProducts.length
-  const resultsText = itemCount > 1 ? 'results' : 'result'
+  const resultsText = itemCount > 1 ? t('home.results') : t('home.result')
 
   return (
     <div className="container my-16">
-      <h1 className="text-3xl font-bold mb-4">Browse eSIMs</h1>
+      <h1 className="text-3xl font-bold mb-4">{t('home.title')}</h1>
 
       <Suspense fallback={null}>
         <Tabs tabs={tabs} paramName="tab" defaultValue="local" className="mb-8" />
@@ -123,18 +129,18 @@ export default async function HomePage({ searchParams }: Props) {
       {searchValue ? (
         <p className="mb-4">
           {itemCount === 0
-            ? 'There are no results that match '
-            : `Showing ${itemCount} ${resultsText} for `}
+            ? t('home.noResultsMatch')
+            : `${t('home.showing')} ${itemCount} ${resultsText} ${t('home.for')} `}
           <span className="font-bold">&quot;{searchValue}&quot;</span>
         </p>
       ) : (
         <p className="mb-8 text-muted-foreground">
-          {tabDescriptions[currentTab] || 'Select an option to see available eSIM plans'}
+          {tabDescriptions[currentTab] || t('home.selectOption')}
         </p>
       )}
 
       {itemCount === 0 && !searchValue && (
-        <p className="text-muted-foreground">No {currentTab} plans available yet.</p>
+        <p className="text-muted-foreground">{t('home.noPlansAvailable', { tab: currentTab })}</p>
       )}
 
       {isLocal && localCountries.length > 0 && (
@@ -142,7 +148,7 @@ export default async function HomePage({ searchParams }: Props) {
           {localCountries.map(({ country, productSlug }) => (
             <Link
               key={country.id}
-              href={`/products/${productSlug}`}
+              href={`/${locale}/products/${productSlug}`}
               className="relative inline-block h-full w-full group"
             >
               <div className="relative aspect-square border rounded-2xl p-8 bg-primary-foreground flex items-center justify-center overflow-hidden">
@@ -174,7 +180,7 @@ export default async function HomePage({ searchParams }: Props) {
             return (
               <Link
                 key={product.id}
-                href={`/products/${product.slug}`}
+                href={`/${locale}/products/${product.slug}`}
                 className="relative inline-block h-full w-full group"
               >
                 <div className="relative aspect-square border rounded-2xl p-8 bg-primary-foreground flex items-center justify-center overflow-hidden">

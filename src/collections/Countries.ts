@@ -16,6 +16,7 @@ export const Countries: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'code',

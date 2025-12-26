@@ -4,6 +4,7 @@ import type { Country, Product, Variant } from '@/payload-types'
 import { AddToCart } from '@/components/Cart/AddToCart'
 import { BuyNow } from '@/components/Cart/BuyNow'
 import { Price } from '@/components/Price'
+import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -13,6 +14,7 @@ import Image from 'next/image'
 import { VariantSelector } from './VariantSelector'
 
 export function ProductDescription({ product }: { product: Product }) {
+  const t = useTranslations()
   const { currency } = useCurrency()
   const searchParams = useSearchParams()
   const selectedVariantId = searchParams.get('variant')
@@ -67,7 +69,7 @@ export function ProductDescription({ product }: { product: Product }) {
           {product.countries && product.countries.length > 0 && (
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                Coverage
+                {t('product.coverage')}
               </h3>
               <p className="mt-1">
                 {product.countries
@@ -81,7 +83,7 @@ export function ProductDescription({ product }: { product: Product }) {
           {product.esimType && (
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                Type
+                {t('product.type')}
               </h3>
               <p className="mt-1 capitalize">{product.esimType}</p>
             </div>
@@ -90,7 +92,7 @@ export function ProductDescription({ product }: { product: Product }) {
           {product.coverage && (
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                Network Coverage
+                {t('product.networkCoverage')}
               </h3>
               <p className="mt-1 whitespace-pre-line text-sm">{product.coverage}</p>
             </div>
@@ -100,7 +102,7 @@ export function ProductDescription({ product }: { product: Product }) {
 
       <div className="flex-1 flex flex-col gap-4 lg:border-l lg:pl-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Select Plan</h2>
+          <h2 className="text-lg font-semibold">{t('product.selectPlan')}</h2>
           {amount > 0 && (
             <div className="uppercase font-mono text-xl">
               <Price amount={amount} />

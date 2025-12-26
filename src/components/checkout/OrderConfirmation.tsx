@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 import { toast } from 'sonner'
 
@@ -36,6 +37,8 @@ interface OrderConfirmationProps {
 
 // Placeholder QR Code component
 const PlaceholderQRCode: React.FC = () => {
+  const t = useTranslations()
+
   return (
     <div className="relative bg-[#c5d4b8] p-4 rounded-lg">
       <div className="w-48 h-48 bg-white rounded-lg flex items-center justify-center p-2">
@@ -100,13 +103,13 @@ const PlaceholderQRCode: React.FC = () => {
           <rect x="85" y="85" width="5" height="5" fill="#1a1a1a" />
         </svg>
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white px-2 py-0.5 text-[10px] text-gray-500 rounded">
-          Activate eSIM
+          {t('orderConfirmation.activateEsim')}
         </div>
       </div>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
         <span className="inline-flex items-center gap-1 bg-white/90 text-green-700 text-xs px-2 py-1 rounded-full">
           <CheckCircle2 className="h-3 w-3" />
-          Valid for 1 activation
+          {t('orderConfirmation.validFor')}
         </span>
       </div>
     </div>
@@ -116,6 +119,8 @@ const PlaceholderQRCode: React.FC = () => {
 export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
   orderItems,
 }) => {
+  const t = useTranslations()
+
   // Generate a fake ICCID
   const generateICCID = () => {
     const base = '8934 0400'
@@ -128,15 +133,15 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
 
   const handleCopyICCID = () => {
     navigator.clipboard.writeText(iccid.replace(/\s/g, ''))
-    toast.success('ICCID copied to clipboard')
+    toast.success(t('orderConfirmation.iccidCopied'))
   }
 
   const handleSendToEmail = () => {
-    toast.success('eSIM details sent to your email')
+    toast.success(t('orderConfirmation.detailsSent'))
   }
 
   const handleDownloadQR = () => {
-    toast.success('QR Code downloaded')
+    toast.success(t('orderConfirmation.qrDownloaded'))
   }
 
   // Get first item for display (typically eSIM orders have one item)
@@ -159,14 +164,13 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
           <div className="inline-flex items-center gap-3 mb-4">
             <CheckCircle2 className="h-10 w-10 text-green-500" />
             <h1 className="text-3xl md:text-4xl font-semibold">
-              Order Confirmed. Activate your eSIM.
+              {t('orderConfirmation.title')}
             </h1>
           </div>
           <p className="text-muted-foreground">
-            Your{' '}
+            {t('orderConfirmation.your')}{' '}
             <span className="font-medium text-foreground">{firstItem?.title}</span>{' '}
-            is ready. Scan the QR code below or enter details manually to activate
-            your plan immediately.
+            {t('orderConfirmation.isReady')}
           </p>
         </div>
 
@@ -180,13 +184,13 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
               <div className="flex items-center gap-3 bg-[#c5d4b8]/20 text-[#7a9a6a] px-4 py-3 rounded-lg">
                 <Sun className="h-5 w-5 shrink-0" />
                 <span className="text-sm">
-                  Increase screen brightness for easier scanning.
+                  {t('orderConfirmation.increaseBrightness')}
                 </span>
               </div>
 
               {/* Installation Steps */}
               <div className="w-full">
-                <h3 className="font-semibold mb-4">How to install</h3>
+                <h3 className="font-semibold mb-4">{t('orderConfirmation.howToInstall')}</h3>
                 <ol className="space-y-3">
                   <li className="flex gap-3">
                     <span className="shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
@@ -209,7 +213,7 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
                     <span className="shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
                       3
                     </span>
-                    <span className="text-sm">Scan the code to the left.</span>
+                    <span className="text-sm">{t('orderConfirmation.scanCode')}</span>
                   </li>
                 </ol>
               </div>
@@ -221,13 +225,13 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-primary" />
-                Plan Details
+                {t('orderConfirmation.planDetails')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-muted-foreground">Network</span>
+                  <span className="text-muted-foreground">{t('orderConfirmation.network')}</span>
                   <span className="font-medium flex items-center gap-2">
                     <span className="w-5 h-5 rounded bg-primary/20 flex items-center justify-center text-xs font-bold">
                       {firstItem?.networkType?.[0] || 'L'}
@@ -237,7 +241,7 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
                 </div>
 
                 <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-muted-foreground">Region</span>
+                  <span className="text-muted-foreground">{t('orderConfirmation.region')}</span>
                   <span className="font-medium flex items-center gap-2">
                     {firstItem?.iconUrl && (
                       <Image
@@ -253,17 +257,17 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
                 </div>
 
                 <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-muted-foreground">Data Plan</span>
+                  <span className="text-muted-foreground">{t('orderConfirmation.dataPlan')}</span>
                   <span className="font-medium">{dataPlan}</span>
                 </div>
 
                 <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-muted-foreground">Validity</span>
+                  <span className="text-muted-foreground">{t('orderConfirmation.validity')}</span>
                   <span className="font-medium">{validity}</span>
                 </div>
 
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-muted-foreground">ICCID</span>
+                  <span className="text-muted-foreground">{t('orderConfirmation.iccid')}</span>
                   <button
                     onClick={handleCopyICCID}
                     className="flex items-center gap-2 bg-muted px-3 py-2 rounded-lg text-sm font-mono hover:bg-muted/80 transition-colors"
@@ -281,7 +285,7 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
                   className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <HelpCircle className="h-4 w-4" />
-                  Trouble activating? Visit Support
+                  {t('orderConfirmation.troubleActivating')}
                 </Link>
               </div>
             </CardContent>
@@ -297,18 +301,18 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             className="gap-2"
           >
             <Mail className="h-4 w-4" />
-            Send to Email
+            {t('orderConfirmation.sendToEmail')}
           </Button>
           <Button size="lg" onClick={handleDownloadQR} className="gap-2">
             <Download className="h-4 w-4" />
-            Download QR Code
+            {t('orderConfirmation.downloadQr')}
           </Button>
         </div>
 
         {/* Continue Shopping */}
         <div className="text-center mt-8">
           <Link href="/shop" className="text-sm text-muted-foreground hover:text-foreground underline">
-            Continue Shopping
+            {t('orderConfirmation.continueShopping')}
           </Link>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import type { Product, Variant } from '@/payload-types'
 
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
+import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useMemo } from 'react'
 
@@ -12,6 +13,7 @@ type Props = {
 }
 
 export function BuyNow({ product }: Props) {
+  const t = useTranslations()
   const { addItem, cart, isLoading } = useCart()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -71,13 +73,13 @@ export function BuyNow({ product }: Props) {
 
   return (
     <Button
-      aria-label="Buy now"
+      aria-label={t('product.buyNow')}
       variant="default"
       disabled={disabled || isLoading}
       onClick={buyNow}
       type="submit"
     >
-      Buy Now
+      {t('product.buyNow')}
     </Button>
   )
 }

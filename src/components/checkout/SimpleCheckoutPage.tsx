@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/providers/Auth'
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -20,6 +21,7 @@ import { Country } from '@/payload-types'
 type CheckoutStep = 'contact' | 'payment' | 'confirmation'
 
 export const SimpleCheckoutPage: React.FC = () => {
+  const t = useTranslations()
   const { user } = useAuth()
   const { cart, clearCart } = useCart()
   const [step, setStep] = useState<CheckoutStep>('contact')
@@ -76,7 +78,7 @@ export const SimpleCheckoutPage: React.FC = () => {
     return (
       <div className="py-12 w-full flex flex-col items-center justify-center">
         <div className="prose dark:prose-invert text-center max-w-none self-center mb-8">
-          <p>Processing your payment...</p>
+          <p>{t('checkout.processing')}</p>
         </div>
         <LoadingSpinner />
       </div>
@@ -87,8 +89,8 @@ export const SimpleCheckoutPage: React.FC = () => {
   if (cartIsEmpty) {
     return (
       <div className="prose dark:prose-invert py-12 w-full items-center">
-        <p>Your cart is empty.</p>
-        <Link href="/">Continue shopping?</Link>
+        <p>{t('cart.empty')}</p>
+        <Link href="/">{t('common.continueShopping')}</Link>
       </div>
     )
   }
@@ -98,16 +100,16 @@ export const SimpleCheckoutPage: React.FC = () => {
       {/* Left Column - Form */}
       <div className="basis-full lg:basis-2/3 flex flex-col gap-8 justify-stretch">
         {/* Contact Section */}
-        <h2 className="font-medium text-3xl">Contact</h2>
+        <h2 className="font-medium text-3xl">{t('checkout.contact')}</h2>
         {!user && (
           <div className="bg-accent dark:bg-black rounded-lg p-4 w-full flex items-center">
             <div className="prose dark:prose-invert">
               <Button asChild className="no-underline text-inherit" variant="outline">
-                <Link href="/login">Log in</Link>
+                <Link href="/login">{t('checkout.login')}</Link>
               </Button>
               <p className="mt-0">
-                <span className="mx-2">or</span>
-                <Link href="/create-account">create an account</Link>
+                <span className="mx-2">{t('common.or')}</span>
+                <Link href="/create-account">{t('checkout.createAccount')}</Link>
               </p>
             </div>
           </div>
@@ -117,18 +119,18 @@ export const SimpleCheckoutPage: React.FC = () => {
           <div className="bg-accent dark:bg-card rounded-lg p-4">
             <p>{user.email}</p>
             <p>
-              Not you?{' '}
+              {t('checkout.notYou')}{' '}
               <Link className="underline" href="/logout">
-                Log out
+                {t('checkout.logout')}
               </Link>
             </p>
           </div>
         ) : (
           <div className="bg-accent dark:bg-black rounded-lg p-4">
-            <p className="mb-4">Enter your email to checkout as a guest.</p>
+            <p className="mb-4">{t('checkout.guestCheckout')}</p>
 
             <FormItem className="mb-6">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">{t('checkout.emailLabel')}</Label>
               <Input
                 disabled={emailConfirmed}
                 id="email"
@@ -146,14 +148,14 @@ export const SimpleCheckoutPage: React.FC = () => {
                 onClick={() => setEmailConfirmed(true)}
                 variant="default"
               >
-                Continue as guest
+                {t('checkout.continueAsGuest')}
               </Button>
             ) : (
               <Button
                 onClick={() => setEmailConfirmed(false)}
                 variant="outline"
               >
-                Edit email
+                {t('checkout.editEmail')}
               </Button>
             )}
           </div>
@@ -162,7 +164,7 @@ export const SimpleCheckoutPage: React.FC = () => {
         {/* Payment Section */}
         {canProceedToPayment && (
           <>
-            <h2 className="font-medium text-3xl">Payment</h2>
+            <h2 className="font-medium text-3xl">{t('checkout.payment')}</h2>
             <div className="bg-accent dark:bg-card rounded-lg p-6">
               <FakePaymentForm
                 total={cart?.subtotal || 0}
@@ -177,7 +179,7 @@ export const SimpleCheckoutPage: React.FC = () => {
 
       {/* Right Column - Cart Summary */}
       <div className="basis-full lg:basis-1/3 lg:pl-8 p-8 border-none bg-primary/5 flex flex-col gap-8 rounded-lg">
-        <h2 className="text-3xl font-medium">Your cart</h2>
+        <h2 className="text-3xl font-medium">{t('checkout.yourCart')}</h2>
         {cart?.items?.map((item, index) => {
           if (typeof item.product === 'object' && item.product) {
             const {
@@ -258,7 +260,7 @@ export const SimpleCheckoutPage: React.FC = () => {
                       </p>
                     )}
                     <div>
-                      {'x'}
+                      {t('cart.quantity')}
                       {quantity}
                     </div>
                   </div>
@@ -272,7 +274,7 @@ export const SimpleCheckoutPage: React.FC = () => {
         })}
         <hr />
         <div className="flex justify-between items-center gap-2">
-          <span className="uppercase">Total</span>
+          <span className="uppercase">{t('common.total')}</span>
           <Price className="text-3xl font-medium" amount={cart.subtotal || 0} />
         </div>
       </div>

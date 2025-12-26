@@ -3,6 +3,7 @@
 import { cn } from '@/utilities/cn'
 import { createUrl } from '@/utilities/createUrl'
 import { SearchIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
@@ -11,6 +12,7 @@ type Props = {
 }
 
 export const CountrySearch: React.FC<Props> = ({ className }) => {
+  const t = useTranslations()
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -38,7 +40,7 @@ export const CountrySearch: React.FC<Props> = ({ className }) => {
         defaultValue={searchParams?.get('q') || ''}
         key={searchParams?.get('q')}
         name="search"
-        placeholder="Search for a country..."
+        placeholder={t('home.searchPlaceholder')}
         type="text"
       />
       <div className="absolute right-0 top-0 mr-3 flex h-full items-center">

@@ -1,16 +1,17 @@
-import type { Product, Variant } from '@/payload-types'
-
-import Link from 'next/link'
-import React from 'react'
-import clsx from 'clsx'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
+import type { Locale } from '@/i18n'
+import type { Product } from '@/payload-types'
+import clsx from 'clsx'
+import Link from 'next/link'
+import React from 'react'
 
 type Props = {
+  locale?: Locale
   product: Partial<Product>
 }
 
-export const ProductGridItem: React.FC<Props> = ({ product }) => {
+export const ProductGridItem: React.FC<Props> = ({ locale = 'en', product }) => {
   const { gallery, priceInUSD, title } = product
 
   let price = priceInUSD
@@ -33,7 +34,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
     gallery?.[0]?.image && typeof gallery[0]?.image !== 'string' ? gallery[0]?.image : false
 
   return (
-    <Link className="relative inline-block h-full w-full group" href={`/products/${product.slug}`}>
+    <Link className="relative inline-block h-full w-full group" href={`/${locale}/products/${product.slug}`}>
       {image ? (
         <Media
           className={clsx(
@@ -48,7 +49,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
         />
       ) : null}
 
-      <div className="font-mono text-primary/50 group-hover:text-primary/100 flex justify-between items-center mt-4">
+      <div className="font-mono text-primary/50 group-hover:text-primary flex justify-between items-center mt-4">
         <div>{title}</div>
 
         {typeof price === 'number' && (

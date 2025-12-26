@@ -66,6 +66,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
       admin: {
         components: {
           Cell: '@/components/TitleWithIcon#TitleWithIcon',
@@ -117,6 +118,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
     {
       name: 'coverage',
       type: 'textarea',
+      localized: true,
       admin: {
         description: 'Network coverage details',
       },
@@ -129,6 +131,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
             {
               name: 'description',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -202,6 +205,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
               name: 'layout',
               type: 'blocks',
               blocks: [CallToAction, Content, MediaBlock],
+              localized: true,
             },
           ],
           label: 'Content',

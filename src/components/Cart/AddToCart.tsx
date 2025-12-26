@@ -5,6 +5,7 @@ import type { Product, Variant } from '@/payload-types'
 import { useCartUI } from '@/providers/CartUI'
 
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
+import { useTranslations } from 'next-intl'
 import clsx from 'clsx'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useMemo } from 'react'
@@ -14,6 +15,7 @@ type Props = {
 }
 
 export function AddToCart({ product }: Props) {
+  const t = useTranslations()
   const { addItem, cart, isLoading } = useCart()
   const { openCart } = useCartUI()
   const searchParams = useSearchParams()
@@ -47,7 +49,7 @@ export function AddToCart({ product }: Props) {
         product: product.id,
         variant: selectedVariant?.id ?? undefined,
       }).then(() => {
-        toast.success('Item added to cart.')
+        toast.success(t('cart.addedToCart'))
         openCart()
       })
     },
@@ -99,7 +101,7 @@ export function AddToCart({ product }: Props) {
 
   return (
     <Button
-      aria-label="Add to cart"
+      aria-label={t('cart.addToCart')}
       variant={'outline'}
       className={clsx({
         'hover:opacity-90': true,
@@ -108,7 +110,7 @@ export function AddToCart({ product }: Props) {
       onClick={addToCart}
       type="submit"
     >
-      Add To Cart
+      {t('cart.addToCart')}
     </Button>
   )
 }

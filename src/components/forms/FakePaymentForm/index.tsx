@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -22,6 +23,7 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
   setIsProcessing,
   total,
 }) => {
+  const t = useTranslations()
   const [cardNumber, setCardNumber] = useState('')
   const [expiryDate, setExpiryDate] = useState('')
   const [cvv, setCvv] = useState('')
@@ -57,20 +59,20 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
     const newErrors: Record<string, string> = {}
 
     if (!cardholderName.trim()) {
-      newErrors.cardholderName = 'Cardholder name is required'
+      newErrors.cardholderName = t('payment.validation.nameRequired')
     }
 
     const cleanCardNumber = cardNumber.replace(/\s/g, '')
     if (!cleanCardNumber || cleanCardNumber.length < 16) {
-      newErrors.cardNumber = 'Valid card number is required'
+      newErrors.cardNumber = t('payment.validation.cardRequired')
     }
 
     if (!expiryDate || expiryDate.length < 5) {
-      newErrors.expiryDate = 'Valid expiry date is required'
+      newErrors.expiryDate = t('payment.validation.expiryRequired')
     }
 
     if (!cvv || cvv.length < 3) {
-      newErrors.cvv = 'Valid CVV is required'
+      newErrors.cvv = t('payment.validation.cvvRequired')
     }
 
     setErrors(newErrors)
@@ -95,14 +97,14 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
         <Lock className="h-4 w-4" />
-        <span>Secure payment (Demo mode)</span>
+        <span>{t('payment.securePayment')}</span>
       </div>
 
       <FormItem>
-        <Label htmlFor="cardholderName">Cardholder Name</Label>
+        <Label htmlFor="cardholderName">{t('payment.cardholderName')}</Label>
         <Input
           id="cardholderName"
-          placeholder="John Doe"
+          placeholder={t('payment.placeholders.name')}
           value={cardholderName}
           onChange={(e) => setCardholderName(e.target.value)}
           disabled={isProcessing}
@@ -113,11 +115,11 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
       </FormItem>
 
       <FormItem>
-        <Label htmlFor="cardNumber">Card Number</Label>
+        <Label htmlFor="cardNumber">{t('payment.cardNumber')}</Label>
         <div className="relative">
           <Input
             id="cardNumber"
-            placeholder="4242 4242 4242 4242"
+            placeholder={t('payment.placeholders.card')}
             value={cardNumber}
             onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
             maxLength={19}
@@ -133,10 +135,10 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
 
       <div className="grid grid-cols-2 gap-4">
         <FormItem>
-          <Label htmlFor="expiryDate">Expiry Date</Label>
+          <Label htmlFor="expiryDate">{t('payment.expiryDate')}</Label>
           <Input
             id="expiryDate"
-            placeholder="MM/YY"
+            placeholder={t('payment.placeholders.expiry')}
             value={expiryDate}
             onChange={(e) => setExpiryDate(formatExpiryDate(e.target.value))}
             maxLength={5}
@@ -148,10 +150,10 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
         </FormItem>
 
         <FormItem>
-          <Label htmlFor="cvv">CVV</Label>
+          <Label htmlFor="cvv">{t('payment.cvv')}</Label>
           <Input
             id="cvv"
-            placeholder="123"
+            placeholder={t('payment.placeholders.cvv')}
             value={cvv}
             onChange={(e) => setCvv(e.target.value.replace(/[^0-9]/g, ''))}
             maxLength={4}
@@ -164,12 +166,12 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
 
       <div className="border-t pt-4 mt-2">
         <div className="flex justify-between items-center mb-4">
-          <span className="text-muted-foreground">Total</span>
+          <span className="text-muted-foreground">{t('common.total')}</span>
           <span className="text-xl font-semibold">${total.toFixed(2)}</span>
         </div>
 
         <Button type="submit" className="w-full" size="lg" disabled={isProcessing}>
-          {isProcessing ? 'Processing...' : `Pay $${total.toFixed(2)}`}
+          {isProcessing ? t('payment.processing') : t('payment.payButton', { amount: `$${total.toFixed(2)}` })}
         </Button>
       </div>
 
@@ -181,12 +183,12 @@ export const FakePaymentForm: React.FC<FakePaymentFormProps> = ({
           disabled={isProcessing}
           className="self-start"
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
       )}
 
       <p className="text-xs text-muted-foreground text-center">
-        This is a demo payment form. No real charges will be made.
+        {t('payment.disclaimer')}
       </p>
     </form>
   )

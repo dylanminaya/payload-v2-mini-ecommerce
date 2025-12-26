@@ -2,6 +2,7 @@
 import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
 import { CMSLink } from '@/components/Link'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -63,6 +64,9 @@ export function HeaderClient({ header }: Props) {
           </div>
 
           <div className="flex justify-end md:w-1/3 gap-4 items-center">
+            <div className="mb-2.5">
+              <LanguageSwitcher />
+            </div>
             <div className="mb-2.5">
               <ThemeSelector />
             </div>

@@ -1,6 +1,9 @@
 import { withPayload } from '@payloadcms/next/withPayload'
+import createNextIntlPlugin from 'next-intl/plugin'
 
 import redirects from './redirects.js'
+
+const withNextIntl = createNextIntlPlugin('./src/i18n.ts')
 
 const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
@@ -35,4 +38,4 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig)
+export default withPayload(withNextIntl(nextConfig))
