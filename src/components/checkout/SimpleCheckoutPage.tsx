@@ -73,11 +73,12 @@ export const SimpleCheckoutPage: React.FC = () => {
       }).filter(Boolean) || []
 
       // Create the order in the database
+      // Note: cart.subtotal is in dollars, but order.amount expects cents
       const result = await createOrder({
         items: orderItemsForDB,
         customer: user?.id || null,
         customerEmail: user?.email || email,
-        amount: cart?.subtotal || 0,
+        amount: Math.round((cart?.subtotal || 0) * 100),
         currency: 'USD',
       })
 
