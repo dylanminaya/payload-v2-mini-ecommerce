@@ -1,8 +1,8 @@
 import { Grid } from '@/components/Grid'
 import { ProductGridItem } from '@/components/ProductGridItem'
+import { Locale } from '@/i18n'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 
 export const metadata = {
   description: 'Search for products in the store.',
@@ -12,7 +12,7 @@ export const metadata = {
 type SearchParams = { [key: string]: string | string[] | undefined }
 
 type Props = {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: Locale }>
   searchParams: Promise<SearchParams>
 }
 
@@ -36,43 +36,43 @@ export default async function ShopPage({ params, searchParams }: Props) {
     ...(sort ? { sort } : { sort: 'title' }),
     ...(searchValue || category
       ? {
-          where: {
-            and: [
-              {
-                _status: {
-                  equals: 'published',
-                },
+        where: {
+          and: [
+            {
+              _status: {
+                equals: 'published',
               },
-              ...(searchValue
-                ? [
+            },
+            ...(searchValue
+              ? [
+                {
+                  or: [
                     {
-                      or: [
-                        {
-                          title: {
-                            like: searchValue,
-                          },
-                        },
-                        {
-                          description: {
-                            like: searchValue,
-                          },
-                        },
-                      ],
-                    },
-                  ]
-                : []),
-              ...(category
-                ? [
-                    {
-                      categories: {
-                        contains: category,
+                      title: {
+                        like: searchValue,
                       },
                     },
-                  ]
-                : []),
-            ],
-          },
-        }
+                    {
+                      description: {
+                        like: searchValue,
+                      },
+                    },
+                  ],
+                },
+              ]
+              : []),
+            ...(category
+              ? [
+                {
+                  categories: {
+                    contains: category,
+                  },
+                },
+              ]
+              : []),
+          ],
+        },
+      }
       : {}),
   })
 
