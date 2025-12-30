@@ -31,6 +31,12 @@ export const SimpleCheckoutPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderItems, setOrderItems] = useState<any[]>([])
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [esimData, setEsimData] = useState<{
+    smdpAddress?: string
+    activationCode?: string
+    lpaString?: string
+    iccid?: string
+  } | null>(null)
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
   const canProceedToPayment = Boolean(user || (email && emailConfirmed))
@@ -86,6 +92,22 @@ export const SimpleCheckoutPage: React.FC = () => {
         setOrderId(result.orderId)
         setOrderItems(displayItems)
 
+        // Fetch the order to get eSIM data
+        try {
+          const orderResponse = await fetch(`/api/orders/${result.orderId}`)
+          if (orderResponse.ok) {
+            const orderData = await orderResponse.json()
+            setEsimData({
+              smdpAddress: orderData.smdpAddress,
+              activationCode: orderData.activationCode,
+              lpaString: orderData.lpaString,
+              iccid: orderData.iccid,
+            })
+          }
+        } catch (error) {
+          console.error('Error fetching order data:', error)
+        }
+
         // Clear the cart
         await clearCart()
 
@@ -105,7 +127,14 @@ export const SimpleCheckoutPage: React.FC = () => {
   if (step === 'confirmation') {
     return (
       <div className="container">
-        <OrderConfirmation orderItems={orderItems} orderId={orderId} />
+        <OrderConfirmation
+          orderItems={orderItems}
+          orderId={orderId}
+          smdpAddress={esimData?.smdpAddress}
+          activationCode={esimData?.activationCode}
+          lpaString={esimData?.lpaString}
+          iccid={esimData?.iccid}
+        />
       </div>
     )
   }

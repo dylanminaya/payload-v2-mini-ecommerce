@@ -28,6 +28,7 @@ export async function createOrder(input: CreateOrderInput) {
         amount: input.amount,
         currency: input.currency || 'USD',
         status: 'processing',
+        createdFromCheckout: true,
       },
     })
 

@@ -1,19 +1,20 @@
 import type { Order } from '@/payload-types'
 import type { Metadata } from 'next'
 
+import { OrderStatus } from '@/components/OrderStatus'
 import { Price } from '@/components/Price'
+import { ProductItem } from '@/components/ProductItem'
+import { AddressItem } from '@/components/addresses/AddressItem'
+import { ESIMActivationDetails } from '@/components/orders/ESIMActivationDetails'
 import { Button } from '@/components/ui/button'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import configPromise from '@payload-config'
+import { ChevronLeftIcon } from 'lucide-react'
+import { headers as getHeaders } from 'next/headers.js'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeftIcon } from 'lucide-react'
-import { ProductItem } from '@/components/ProductItem'
-import { headers as getHeaders } from 'next/headers.js'
-import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { OrderStatus } from '@/components/OrderStatus'
-import { AddressItem } from '@/components/addresses/AddressItem'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,21 +50,21 @@ export default async function Order({ params, searchParams }: PageProps) {
           },
           ...(user
             ? [
-                {
-                  customer: {
-                    equals: user.id,
-                  },
+              {
+                customer: {
+                  equals: user.id,
                 },
-              ]
+              },
+            ]
             : []),
           ...(email
             ? [
-                {
-                  customerEmail: {
-                    equals: email,
-                  },
+              {
+                customerEmail: {
+                  equals: email,
                 },
-              ]
+              },
+            ]
             : []),
         ],
       },
@@ -77,6 +78,10 @@ export default async function Order({ params, searchParams }: PageProps) {
         createdAt: true,
         updatedAt: true,
         shippingAddress: true,
+        smdpAddress: true,
+        activationCode: true,
+        lpaString: true,
+        iccid: true,
       },
     })
 
@@ -139,7 +144,7 @@ export default async function Order({ params, searchParams }: PageProps) {
 
           <div className="">
             <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Total</p>
-            {order.amount && <Price className="text-lg" amount={order.amount} />}
+            {order.amount && <Price className="text-lg" amount={order.amount / 100} />}
           </div>
 
           {order.status && (
@@ -186,6 +191,20 @@ export default async function Order({ params, searchParams }: PageProps) {
 
             {/* @ts-expect-error - some kind of type hell */}
             <AddressItem address={order.shippingAddress} hideActions />
+          </div>
+        )}
+
+        {(order.smdpAddress || order.activationCode || order.lpaString || order.iccid) && (
+          <div>
+            <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">
+              eSIM Activation Details
+            </h2>
+            <ESIMActivationDetails
+              smdpAddress={order.smdpAddress || ''}
+              activationCode={order.activationCode || ''}
+              lpaString={order.lpaString || ''}
+              iccid={order.iccid || ''}
+            />
           </div>
         )}
       </div>

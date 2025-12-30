@@ -223,11 +223,33 @@ export interface User {
   password?: string | null;
 }
 /**
+ * Orders created from checkout are locked and cannot be edited or deleted. The edit icons may appear but will not function.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
  */
 export interface Order {
   id: string;
+  /**
+   * This order was created from the checkout process and is locked
+   */
+  createdFromCheckout?: boolean | null;
+  /**
+   * The host server for the eSIM profile
+   */
+  smdpAddress?: string | null;
+  /**
+   * The unique matching ID for the profile
+   */
+  activationCode?: string | null;
+  /**
+   * Complete LPA string for copy-paste activation
+   */
+  lpaString?: string | null;
+  /**
+   * The unique 19- or 20-digit serial number of the digital SIM card
+   */
+  iccid?: string | null;
   items?:
     | {
         product?: (string | null) | Product;
@@ -1733,6 +1755,11 @@ export interface CartsSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
+  createdFromCheckout?: T;
+  smdpAddress?: T;
+  activationCode?: T;
+  lpaString?: T;
+  iccid?: T;
   items?:
     | T
     | {
