@@ -10,9 +10,9 @@ import {
   Mail,
   Sun,
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
 import React from 'react'
 import { toast } from 'sonner'
 
@@ -132,14 +132,15 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
   const t = useTranslations()
 
   // Generate a fake ICCID if none provided
-  const generateICCID = () => {
+  const generatedIccid = React.useMemo(() => {
     const base = '8934 0400'
     const hidden = '**** ****'
     const last = Math.floor(1000 + Math.random() * 9000).toString()
     return `${base} ${hidden} ${last}`
-  }
+  }, [])
 
-  const iccid = iccidProp || React.useMemo(() => generateICCID(), [])
+  const iccid = iccidProp || generatedIccid
+
 
   const handleCopyICCID = () => {
     navigator.clipboard.writeText(iccid.replace(/\s/g, ''))
