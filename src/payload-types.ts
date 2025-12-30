@@ -230,31 +230,23 @@ export interface User {
  */
 export interface Order {
   id: string;
-  /**
-   * This order was created from the checkout process and is locked
-   */
-  createdFromCheckout?: boolean | null;
-  /**
-   * The host server for the eSIM profile
-   */
-  smdpAddress?: string | null;
-  /**
-   * The unique matching ID for the profile
-   */
-  activationCode?: string | null;
-  /**
-   * Complete LPA string for copy-paste activation
-   */
-  lpaString?: string | null;
-  /**
-   * The unique 19- or 20-digit serial number of the digital SIM card
-   */
-  iccid?: string | null;
   items?:
     | {
         product?: (string | null) | Product;
         variant?: (string | null) | Variant;
         quantity: number;
+        /**
+         * Generated eSIM activation codes for this item
+         */
+        esimActivations?:
+          | {
+              smdpAddress?: string | null;
+              activationCode?: string | null;
+              lpaString?: string | null;
+              iccid?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -277,6 +269,10 @@ export interface Order {
   status?: OrderStatus;
   amount?: number | null;
   currency?: 'USD' | null;
+  /**
+   * This order was created from the checkout process and is locked
+   */
+  createdFromCheckout?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1755,17 +1751,21 @@ export interface CartsSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
-  createdFromCheckout?: T;
-  smdpAddress?: T;
-  activationCode?: T;
-  lpaString?: T;
-  iccid?: T;
   items?:
     | T
     | {
         product?: T;
         variant?: T;
         quantity?: T;
+        esimActivations?:
+          | T
+          | {
+              smdpAddress?: T;
+              activationCode?: T;
+              lpaString?: T;
+              iccid?: T;
+              id?: T;
+            };
         id?: T;
       };
   shippingAddress?:
@@ -1789,6 +1789,7 @@ export interface OrdersSelect<T extends boolean = true> {
   status?: T;
   amount?: T;
   currency?: T;
+  createdFromCheckout?: T;
   updatedAt?: T;
   createdAt?: T;
 }

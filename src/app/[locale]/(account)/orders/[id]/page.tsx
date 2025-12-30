@@ -71,17 +71,18 @@ export default async function Order({ params, searchParams }: PageProps) {
       select: {
         amount: true,
         currency: true,
-        items: true,
+        items: {
+          product: true,
+          variant: true,
+          quantity: true,
+          esimActivations: true,
+        },
         customerEmail: true,
         customer: true,
         status: true,
         createdAt: true,
         updatedAt: true,
         shippingAddress: true,
-        smdpAddress: true,
-        activationCode: true,
-        lpaString: true,
-        iccid: true,
       },
     })
 
@@ -172,12 +173,21 @@ export default async function Order({ params, searchParams }: PageProps) {
                   item.variant && typeof item.variant === 'object' ? item.variant : undefined
 
                 return (
-                  <li key={item.id}>
+                  <li key={item.id} className="space-y-4">
                     <ProductItem
                       product={item.product}
                       quantity={item.quantity}
                       variant={variant}
                     />
+
+                    {/* Display eSIM activations for this item */}
+                    {(item as any).esimActivations && (item as any).esimActivations.length > 0 && (
+                      <ESIMActivationDetails
+                        activations={(item as any).esimActivations}
+                        itemTitle={item.product.title}
+                        showIndexLabels={item.quantity > 1}
+                      />
+                    )}
                   </li>
                 )
               })}
@@ -191,20 +201,6 @@ export default async function Order({ params, searchParams }: PageProps) {
 
             {/* @ts-expect-error - some kind of type hell */}
             <AddressItem address={order.shippingAddress} hideActions />
-          </div>
-        )}
-
-        {(order.smdpAddress || order.activationCode || order.lpaString || order.iccid) && (
-          <div>
-            <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">
-              eSIM Activation Details
-            </h2>
-            <ESIMActivationDetails
-              smdpAddress={order.smdpAddress || ''}
-              activationCode={order.activationCode || ''}
-              lpaString={order.lpaString || ''}
-              iccid={order.iccid || ''}
-            />
           </div>
         )}
       </div>

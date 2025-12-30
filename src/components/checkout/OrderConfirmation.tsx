@@ -15,6 +15,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { toast } from 'sonner'
+import { ESIMActivationDetails } from '@/components/orders/ESIMActivationDetails'
 
 interface OrderItem {
   title: string
@@ -28,16 +29,18 @@ interface OrderItem {
   variant?: {
     options?: Array<{ label?: string } | string>
   }
+  esimActivations?: Array<{
+    smdpAddress?: string
+    activationCode?: string
+    lpaString?: string
+    iccid?: string
+  }>
 }
 
 interface OrderConfirmationProps {
   orderItems: OrderItem[]
   orderNumber?: string
   orderId?: string | null
-  smdpAddress?: string
-  activationCode?: string
-  lpaString?: string
-  iccid?: string
 }
 
 // Placeholder QR Code component
@@ -124,12 +127,11 @@ const PlaceholderQRCode: React.FC = () => {
 export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
   orderItems,
   orderId,
-  smdpAddress,
-  activationCode,
-  lpaString,
-  iccid: iccidProp,
 }) => {
   const t = useTranslations()
+
+  // Get first item's first eSIM activation for ICCID display
+  const firstActivation = orderItems[0]?.esimActivations?.[0]
 
   // Generate a fake ICCID if none provided
   const generatedIccid = React.useMemo(() => {
@@ -139,26 +141,11 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
     return `${base} ${hidden} ${last}`
   }, [])
 
-  const iccid = iccidProp || generatedIccid
-
+  const iccid = firstActivation?.iccid || generatedIccid
 
   const handleCopyICCID = () => {
     navigator.clipboard.writeText(iccid.replace(/\s/g, ''))
     toast.success(t('orderConfirmation.iccidCopied'))
-  }
-
-  const handleCopyLPA = () => {
-    if (lpaString) {
-      navigator.clipboard.writeText(lpaString)
-      toast.success('LPA String copied to clipboard!')
-    }
-  }
-
-  const handleCopyActivationCode = () => {
-    if (activationCode) {
-      navigator.clipboard.writeText(activationCode)
-      toast.success('Activation Code copied to clipboard!')
-    }
   }
 
   const handleSendToEmail = () => {
@@ -328,75 +315,20 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
           </Card>
         </div>
 
-        {/* eSIM Activation Details */}
-        {(smdpAddress || activationCode || lpaString) && (
-          <Card className="bg-card border-border mt-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                eSIM Activation Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {smdpAddress && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">
-                    SM-DP+ Address
-                  </label>
-                  <div className="flex items-center gap-2 bg-muted px-3 py-2 rounded-lg">
-                    <code className="flex-1 text-sm font-mono">{smdpAddress}</code>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(smdpAddress)
-                        toast.success('SM-DP+ Address copied!')
-                      }}
-                      className="shrink-0 hover:bg-background p-1 rounded"
-                    >
-                      <Copy className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activationCode && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">
-                    Activation Code
-                  </label>
-                  <div className="flex items-center gap-2 bg-muted px-3 py-2 rounded-lg">
-                    <code className="flex-1 text-sm font-mono break-all">{activationCode}</code>
-                    <button
-                      onClick={handleCopyActivationCode}
-                      className="shrink-0 hover:bg-background p-1 rounded"
-                    >
-                      <Copy className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {lpaString && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">
-                    LPA String (Copy & Paste)
-                  </label>
-                  <div className="flex items-center gap-2 bg-muted px-3 py-2 rounded-lg">
-                    <code className="flex-1 text-sm font-mono break-all">{lpaString}</code>
-                    <button
-                      onClick={handleCopyLPA}
-                      className="shrink-0 hover:bg-background p-1 rounded"
-                    >
-                      <Copy className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Use this string to manually activate your eSIM if QR code scanning is not available
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+        {/* eSIM Activation Details per item */}
+        <div className="mt-8 space-y-6">
+          {orderItems.map((item, index) => (
+            item.esimActivations && item.esimActivations.length > 0 && (
+              <div key={index}>
+                <ESIMActivationDetails
+                  activations={item.esimActivations}
+                  itemTitle={item.title}
+                  showIndexLabels={item.esimActivations.length > 1}
+                />
+              </div>
+            )
+          ))}
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">

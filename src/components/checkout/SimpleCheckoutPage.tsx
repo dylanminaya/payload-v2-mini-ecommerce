@@ -31,12 +31,6 @@ export const SimpleCheckoutPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderItems, setOrderItems] = useState<any[]>([])
   const [orderId, setOrderId] = useState<string | null>(null)
-  const [esimData, setEsimData] = useState<{
-    smdpAddress?: string
-    activationCode?: string
-    lpaString?: string
-    iccid?: string
-  } | null>(null)
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
   const canProceedToPayment = Boolean(user || (email && emailConfirmed))
@@ -57,27 +51,6 @@ export const SimpleCheckoutPage: React.FC = () => {
         })
         .filter((item): item is { product: string; variant: string | null; quantity: number } => item !== null) || []
 
-      // Store order items for display before clearing cart
-      const displayItems = cart?.items?.map((item) => {
-        if (typeof item.product === 'object' && item.product) {
-          const product = item.product
-          const isLocal = product.esimType === 'local'
-          const firstCountry = product.countries?.find(
-            (c): c is Country => typeof c === 'object'
-          )
-          return {
-            title: product.title,
-            provider: product.provider,
-            region: isLocal ? firstCountry?.name : product.title,
-            iconUrl: isLocal ? firstCountry?.flagUrl : product.iconUrl,
-            esimType: product.esimType,
-            networkType: product.networkType,
-            variant: item.variant,
-          }
-        }
-        return null
-      }).filter(Boolean) || []
-
       // Create the order in the database
       // Note: cart.subtotal is in dollars, but order.amount expects cents
       const result = await createOrder({
@@ -90,19 +63,29 @@ export const SimpleCheckoutPage: React.FC = () => {
 
       if (result.success && result.orderId) {
         setOrderId(result.orderId)
-        setOrderItems(displayItems)
 
-        // Fetch the order to get eSIM data
+        // Fetch the order to get eSIM data with items
         try {
-          const orderResponse = await fetch(`/api/orders/${result.orderId}`)
+          const orderResponse = await fetch(`/api/orders/${result.orderId}?depth=2`)
           if (orderResponse.ok) {
             const orderData = await orderResponse.json()
-            setEsimData({
-              smdpAddress: orderData.smdpAddress,
-              activationCode: orderData.activationCode,
-              lpaString: orderData.lpaString,
-              iccid: orderData.iccid,
-            })
+
+            // Map order items to include eSIM activations
+            const itemsWithEsim = orderData.items?.map((item: any) => {
+              const product = item.product
+              return {
+                title: product?.title || 'Product',
+                provider: product?.provider,
+                region: product?.region,
+                iconUrl: product?.iconUrl,
+                esimType: product?.esimType,
+                networkType: product?.networkType,
+                variant: item.variant,
+                esimActivations: item.esimActivations || [],
+              }
+            }) || []
+
+            setOrderItems(itemsWithEsim)
           }
         } catch (error) {
           console.error('Error fetching order data:', error)
@@ -130,10 +113,6 @@ export const SimpleCheckoutPage: React.FC = () => {
         <OrderConfirmation
           orderItems={orderItems}
           orderId={orderId}
-          smdpAddress={esimData?.smdpAddress}
-          activationCode={esimData?.activationCode}
-          lpaString={esimData?.lpaString}
-          iccid={esimData?.iccid}
         />
       </div>
     )
