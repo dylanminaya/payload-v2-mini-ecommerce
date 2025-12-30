@@ -3,6 +3,7 @@ import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
 import { CMSLink } from '@/components/Link'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { UserNav } from '@/components/UserNav'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -69,6 +70,9 @@ export function HeaderClient({ header }: Props) {
             </div>
             <div className="mb-2.5">
               <ThemeSelector />
+            </div>
+            <div className="mb-2.5">
+              <UserNav />
             </div>
             <Suspense fallback={<OpenCartButton />}>
               <Cart />
