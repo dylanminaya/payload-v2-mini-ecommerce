@@ -4,11 +4,11 @@ import type { Metadata } from 'next'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 import { OrderItem } from '@/components/OrderItem'
-import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { headers as getHeaders } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { getPayload } from 'payload'
 
 export default async function Orders() {
   const t = await getTranslations('account.orders')
@@ -37,10 +37,10 @@ export default async function Orders() {
     })
 
     orders = ordersResult?.docs || []
-  } catch (_error) {}
+  } catch (_error) { }
 
   return (
-    <>
+    <div className="container max-w-4xl mx-auto py-8">
       <div className="border p-8 rounded-lg bg-primary-foreground w-full">
         <h1 className="text-3xl font-medium mb-8">{t('title')}</h1>
         {(!orders || !Array.isArray(orders) || orders?.length === 0) && (
@@ -57,7 +57,7 @@ export default async function Orders() {
           </ul>
         )}
       </div>
-    </>
+    </div>
   )
 }
 

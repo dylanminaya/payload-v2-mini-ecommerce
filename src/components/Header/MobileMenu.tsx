@@ -2,6 +2,7 @@
 
 import type { Header } from '@/payload-types'
 
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { CMSLink } from '@/components/Link'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,10 +14,11 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { useAuth } from '@/providers/Auth'
+import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { MenuIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface Props {
   menu: Header['navItems']
@@ -66,6 +68,20 @@ export function MobileMenu({ menu }: Props) {
               ))}
             </ul>
           ) : null}
+        </div>
+
+        <div className="border-t pt-4 mb-4">
+          <h3 className="text-sm font-medium mb-3">Settings</h3>
+          <div className="flex flex-col">
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Language</span>
+              <LanguageSwitcher />
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Theme</span>
+              <ThemeSelector />
+            </div>
+          </div>
         </div>
 
         {user ? (

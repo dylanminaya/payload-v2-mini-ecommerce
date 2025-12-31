@@ -96,7 +96,7 @@ export default async function Order({ params, searchParams }: PageProps) {
   }
 
   return (
-    <div className="">
+    <div>
       <div className="flex gap-8 justify-between items-center mb-6">
         {user ? (
           <div className="flex gap-4">

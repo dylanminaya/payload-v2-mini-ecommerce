@@ -47,7 +47,7 @@ export function CartModal() {
         <OpenCartButton quantity={totalQuantity} />
       </SheetTrigger>
 
-      <SheetContent className="flex flex-col">
+      <SheetContent side="right" className="flex flex-col w-full sm:max-w-lg">
         <SheetHeader>
           <SheetTitle>{t('cart.title')}</SheetTitle>
 
@@ -55,7 +55,7 @@ export function CartModal() {
         </SheetHeader>
 
         {!cart || cart?.items?.length === 0 ? (
-          <div className="text-center flex flex-col items-center gap-2">
+          <div className="text-center flex flex-col items-center gap-2 py-8">
             <ShoppingCart className="h-16" />
             <p className="text-center text-2xl font-bold">{t('cart.empty')}</p>
           </div>

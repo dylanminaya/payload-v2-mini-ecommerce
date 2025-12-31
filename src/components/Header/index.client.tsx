@@ -65,10 +65,10 @@ export function HeaderClient({ header }: Props) {
           </div>
 
           <div className="flex justify-end md:w-1/3 gap-4 items-center">
-            <div className="mb-2.5">
+            <div className="hidden md:block mb-2.5">
               <LanguageSwitcher />
             </div>
-            <div className="mb-2.5">
+            <div className="hidden md:block mb-2.5">
               <ThemeSelector />
             </div>
             <div className="mb-2.5">
