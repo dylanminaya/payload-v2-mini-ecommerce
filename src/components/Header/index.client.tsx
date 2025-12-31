@@ -71,7 +71,7 @@ export function HeaderClient({ header }: Props) {
             <div className="hidden md:block mb-2.5">
               <ThemeSelector />
             </div>
-            <div className="mb-2.5">
+            <div className="hidden md:block mb-2.5">
               <UserNav />
             </div>
             <Suspense fallback={<OpenCartButton />}>
