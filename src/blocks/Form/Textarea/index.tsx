@@ -12,11 +12,7 @@ import { FormError } from '@/components/forms/FormError'
 
 export const Textarea: React.FC<
   TextField & {
-    errors: Partial<
-      FieldErrorsImpl<{
-        [x: string]: any
-      }>
-    >
+    errors: Partial<FieldErrorsImpl<FieldValues>>
     register: UseFormRegister<FieldValues>
     rows?: number
   }

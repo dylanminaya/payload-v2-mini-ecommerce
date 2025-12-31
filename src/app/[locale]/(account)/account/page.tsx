@@ -1,16 +1,16 @@
 import type { Metadata } from 'next'
 
-import { Button } from '@/components/ui/button'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import Link from 'next/link'
-import { headers as getHeaders } from 'next/headers.js'
-import configPromise from '@payload-config'
 import { AccountForm } from '@/components/forms/AccountForm'
-import { Order } from '@/payload-types'
 import { OrderItem } from '@/components/OrderItem'
-import { getPayload } from 'payload'
-import { redirect } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Order } from '@/payload-types'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import configPromise from '@payload-config'
 import { getTranslations } from 'next-intl/server'
+import { headers as getHeaders } from 'next/headers.js'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { getPayload } from 'payload'
 
 export default async function AccountPage() {
   const t = await getTranslations('account')
@@ -42,10 +42,7 @@ export default async function AccountPage() {
 
     orders = ordersResult?.docs || []
   } catch (error) {
-    // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
-    // so swallow the error here and simply render the page with fallback data where necessary
-    // in production you may want to redirect to a 404  page or at least log the error somewhere
-    // console.error(error)
+    console.error(error)
   }
 
   return (
@@ -68,7 +65,7 @@ export default async function AccountPage() {
 
         {orders && orders.length > 0 && (
           <ul className="flex flex-col gap-6 mb-8">
-            {orders?.map((order, index) => (
+            {orders?.map((order) => (
               <li key={order.id}>
                 <OrderItem order={order} />
               </li>

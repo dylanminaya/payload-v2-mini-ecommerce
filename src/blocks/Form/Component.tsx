@@ -1,17 +1,17 @@
 'use client'
 import type { Form as FormType } from '@payloadcms/plugin-form-builder/types'
 
-import { useRouter } from 'next/navigation'
-import React, { useCallback, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
 import { RichText } from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import { useRouter } from 'next/navigation'
+import React, { useCallback, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
-import { buildInitialFormState } from './buildInitialFormState'
-import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
 import { DefaultDocumentIDType } from 'payload'
+import { buildInitialFormState } from './buildInitialFormState'
+import { fields } from './fields'
 
 export type Value = unknown
 
@@ -47,10 +47,7 @@ export const FormBlock: React.FC<
     defaultValues: buildInitialFormState(formFromProps.fields),
   })
   const {
-    control,
-    formState: { errors },
     handleSubmit,
-    register,
   } = formMethods
 
   const [isLoading, setIsLoading] = useState(false)
@@ -126,7 +123,7 @@ export const FormBlock: React.FC<
   )
 
   return (
-    <div className="container lg:max-w-[48rem]">
+    <div className="container lg:max-w-3xl">
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
@@ -143,19 +140,16 @@ export const FormBlock: React.FC<
                 {formFromProps &&
                   formFromProps.fields &&
                   formFromProps.fields?.map((field, index) => {
-                    const Field: React.FC<any> | undefined =
-                      fields?.[field.blockType as keyof typeof fields]
+                    const FieldComponent = fields?.[field.blockType as keyof typeof fields]
 
-                    if (Field) {
+                    if (FieldComponent) {
                       return (
                         <div className="mb-6 last:mb-0" key={index}>
-                          <Field
+                          <FieldComponent
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            {...(field as any)}
                             form={formFromProps}
-                            {...field}
                             {...formMethods}
-                            control={control}
-                            errors={errors}
-                            register={register}
                           />
                         </div>
                       )

@@ -1,14 +1,11 @@
 import { Media } from '@/components/Media'
-import { OrderStatus } from '@/components/OrderStatus'
 import { Price } from '@/components/Price'
-import { Button } from '@/components/ui/button'
-import { Media as MediaType, Order, Product, Variant } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { Country, Product, Variant } from '@/payload-types'
+import Image from 'next/image'
 import Link from 'next/link'
 
 type Props = {
   product: Product
-  style?: 'compact' | 'default'
   variant?: Variant
   quantity?: number
   /**
@@ -19,7 +16,6 @@ type Props = {
 
 export const ProductItem: React.FC<Props> = ({
   product,
-  style = 'default',
   quantity,
   variant,
   currencyCode,
@@ -58,14 +54,32 @@ export const ProductItem: React.FC<Props> = ({
   const itemPrice = variant?.priceInUSD || product.priceInUSD
   const itemURL = `/products/${product.slug}${variant ? `?variant=${variant.id}` : ''}`
 
+  // Determine which icon to display (country flag or region icon)
+  const isLocal = product.esimType === 'local'
+  const firstCountry = product.countries?.find((c): c is Country => typeof c === 'object')
+  const productIcon = product.iconUrl as string | undefined
+  const displayIcon = isLocal ? (firstCountry?.flagUrl || productIcon) : productIcon
+  const iconAlt = isLocal
+    ? `${firstCountry?.name || product.title} flag`
+    : product.title || 'Region icon'
+
   return (
     <div className="flex items-center gap-4">
-      <div className="flex items-stretch justify-stretch h-20 w-20 p-2 rounded-lg border">
+      <div className="relative flex items-stretch justify-stretch h-20 w-20 p-2 rounded-lg border">
         <div className="relative w-full h-full">
           {image && typeof image !== 'string' && (
             <Media className="" fill imgClassName="rounded-lg object-cover" resource={image} />
           )}
         </div>
+        {displayIcon && (
+          <Image
+            alt={iconAlt}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-auto object-contain rounded-sm shadow-sm"
+            height={32}
+            src={displayIcon}
+            width={32}
+          />
+        )}
       </div>
       <div className="flex grow justify-between items-center">
         <div className="flex flex-col gap-1">
@@ -73,7 +87,7 @@ export const ProductItem: React.FC<Props> = ({
             <Link href={itemURL}>{title}</Link>
           </p>
           {variant && (
-            <p className="text-sm font-mono text-primary/50 tracking-[0.1em]">
+            <p className="text-sm font-mono text-primary/50 tracking-widest">
               {variant.options
                 ?.map((option) => {
                   if (typeof option === 'object') return option.label

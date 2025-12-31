@@ -1,5 +1,5 @@
 import { CollectionOverride } from '@payloadcms/plugin-ecommerce/types'
-import { CollectionBeforeChangeHook } from 'payload'
+import { CollectionBeforeChangeHook, Field, TabsField } from 'payload'
 
 // Generate random eSIM data
 const generateRandomICCID = (): string => {
@@ -40,9 +40,9 @@ const generateESIMData: CollectionBeforeChangeHook = async ({ data, operation })
   }
 
   // Process each item in the order
-  const itemsWithESIM = (data.items || []).map((item: any) => {
+  const itemsWithESIM = (data.items || []).map((item: Record<string, number | string>) => {
     // All products are eSIM products in this app
-    const quantity = Math.max(1, item.quantity || 1)
+    const quantity = Math.max(1, Number(item.quantity) || 1)
     const esimActivations = []
 
     // Generate one activation set per quantity unit
@@ -92,7 +92,7 @@ const preventCheckoutOrderChanges: CollectionBeforeChangeHook = async ({ data, r
 
 export const OrdersCollection: CollectionOverride = ({ defaultCollection }) => {
   // Helper function to recursively find and modify the items field
-  const findAndExtendItemsField = (fields: any[]): any[] => {
+  const findAndExtendItemsField = (fields: Field[]): Field[] => {
     return fields.map((field) => {
       // Found the items field
       if ('name' in field && field.name === 'items' && field.type === 'array') {
@@ -136,10 +136,10 @@ export const OrdersCollection: CollectionOverride = ({ defaultCollection }) => {
       }
 
       // Recursively search in tabs
-      if (field.type === 'tabs' && Array.isArray(field.tabs)) {
+      if (field.type === 'tabs' && Array.isArray((field as TabsField).tabs)) {
         return {
           ...field,
-          tabs: field.tabs.map((tab: any) => ({
+          tabs: (field as TabsField).tabs.map((tab) => ({
             ...tab,
             fields: findAndExtendItemsField(tab.fields || []),
           })),

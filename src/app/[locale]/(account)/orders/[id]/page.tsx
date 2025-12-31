@@ -68,22 +68,6 @@ export default async function Order({ params, searchParams }: PageProps) {
             : []),
         ],
       },
-      select: {
-        amount: true,
-        currency: true,
-        items: {
-          product: true,
-          variant: true,
-          quantity: true,
-          esimActivations: true,
-        },
-        customerEmail: true,
-        customer: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-        shippingAddress: true,
-      },
     })
 
     const canAccessAsGuest =
@@ -181,9 +165,16 @@ export default async function Order({ params, searchParams }: PageProps) {
                     />
 
                     {/* Display eSIM activations for this item */}
-                    {(item as any).esimActivations && (item as any).esimActivations.length > 0 && (
+                    {item.esimActivations && Array.isArray(item.esimActivations) && item.esimActivations.length > 0 && (
                       <ESIMActivationDetails
-                        activations={(item as any).esimActivations}
+                        activations={
+                          item.esimActivations.map(activation => ({
+                            smdpAddress: activation.smdpAddress ?? undefined,
+                            activationCode: activation.activationCode ?? undefined,
+                            lpaString: activation.lpaString ?? undefined,
+                            iccid: activation.iccid ?? undefined,
+                          }))
+                        }
                         itemTitle={item.product.title}
                         showIndexLabels={item.quantity > 1}
                       />

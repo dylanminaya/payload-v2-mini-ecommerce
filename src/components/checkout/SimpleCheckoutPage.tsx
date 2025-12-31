@@ -21,6 +21,22 @@ import { Country } from '@/payload-types'
 
 type CheckoutStep = 'contact' | 'payment' | 'confirmation'
 
+type OrderItemWithEsim = {
+  title: string
+  provider?: string
+  region?: string
+  iconUrl?: string
+  esimType?: "local" | "regional" | "global"
+  networkType?: "5G" | "LTE" | "4G" | "3G"
+  variant?: Record<string, string | number>
+  esimActivations: Array<{
+    smdpAddress?: string
+    activationCode?: string
+    lpaString?: string
+    iccid?: string
+  }>
+}
+
 export const SimpleCheckoutPage: React.FC = () => {
   const t = useTranslations()
   const { user } = useAuth()
@@ -29,7 +45,7 @@ export const SimpleCheckoutPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [emailConfirmed, setEmailConfirmed] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
-  const [orderItems, setOrderItems] = useState<any[]>([])
+  const [orderItems, setOrderItems] = useState<OrderItemWithEsim[]>([])
   const [orderId, setOrderId] = useState<string | null>(null)
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
@@ -71,7 +87,23 @@ export const SimpleCheckoutPage: React.FC = () => {
             const orderData = await orderResponse.json()
 
             // Map order items to include eSIM activations
-            const itemsWithEsim = orderData.items?.map((item: any) => {
+            const itemsWithEsim: OrderItemWithEsim[] = orderData.items?.map((item: {
+              product?: {
+                title?: string
+                provider?: string
+                region?: string
+                iconUrl?: string
+                esimType?: "local" | "regional" | "global"
+                networkType?: "5G" | "LTE" | "4G" | "3G"
+              }
+              variant?: Record<string, string | number>
+              esimActivations?: Array<{
+                smdpAddress?: string
+                activationCode?: string
+                lpaString?: string
+                iccid?: string
+              }>
+            }) => {
               const product = item.product
               return {
                 title: product?.title || 'Product',

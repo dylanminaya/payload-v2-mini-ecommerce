@@ -12,11 +12,7 @@ import { capitaliseFirstLetter } from '@/utilities/capitaliseFirstLetter'
 
 export const Email: React.FC<
   EmailField & {
-    errors: Partial<
-      FieldErrorsImpl<{
-        [x: string]: any
-      }>
-    >
+    errors: Partial<FieldErrorsImpl<FieldValues>>
     register: UseFormRegister<FieldValues>
   }
 > = ({ name, defaultValue, errors, label, register, required: requiredFromProps, width }) => {

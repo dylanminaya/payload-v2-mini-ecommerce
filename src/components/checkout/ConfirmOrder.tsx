@@ -40,7 +40,7 @@ export const ConfirmOrder: React.FC = () => {
       // If no payment intent ID is found, redirect to the home
       router.push('/')
     }
-  }, [cart, searchParams])
+  }, [cart, searchParams, confirmOrder, router])
 
   return (
     <div className="text-center w-full flex flex-col items-center justify-start gap-4">

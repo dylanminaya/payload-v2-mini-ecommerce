@@ -14,13 +14,12 @@ type Props = {
 
 export function BuyNow({ product }: Props) {
   const t = useTranslations()
-  const { addItem, cart, isLoading } = useCart()
+  const { addItem, isLoading } = useCart()
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const variants = product.variants?.docs || []
-
   const selectedVariant = useMemo<Variant | undefined>(() => {
+    const variants = product.variants?.docs || []
     if (product.enableVariants && variants.length) {
       const variantId = searchParams.get('variant')
 
@@ -37,7 +36,7 @@ export function BuyNow({ product }: Props) {
     }
 
     return undefined
-  }, [product.enableVariants, searchParams, variants])
+  }, [product.enableVariants, product.variants?.docs, searchParams])
 
   const buyNow = useCallback(
     async (e: React.FormEvent<HTMLButtonElement>) => {

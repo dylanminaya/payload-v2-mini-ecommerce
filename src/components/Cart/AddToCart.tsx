@@ -5,8 +5,8 @@ import type { Product, Variant } from '@/payload-types'
 import { useCartUI } from '@/providers/CartUI'
 
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
-import { useTranslations } from 'next-intl'
 import clsx from 'clsx'
+import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useMemo } from 'react'
 import { toast } from 'sonner'
@@ -53,7 +53,7 @@ export function AddToCart({ product }: Props) {
         openCart()
       })
     },
-    [addItem, product, selectedVariant, openCart],
+    [addItem, product, selectedVariant, openCart, t],
   )
 
   const disabled = useMemo<boolean>(() => {

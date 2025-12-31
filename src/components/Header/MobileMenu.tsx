@@ -29,8 +29,6 @@ export function MobileMenu({ menu }: Props) {
   const searchParams = useSearchParams()
   const [isOpen, setIsOpen] = useState(false)
 
-  const closeMobileMenu = () => setIsOpen(false)
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768) {
