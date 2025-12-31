@@ -8,8 +8,10 @@ import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 
 export default async function Orders() {
+  const t = await getTranslations('account.orders')
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
   const { user } = await payload.auth({ headers })
@@ -40,9 +42,9 @@ export default async function Orders() {
   return (
     <>
       <div className="border p-8 rounded-lg bg-primary-foreground w-full">
-        <h1 className="text-3xl font-medium mb-8">Orders</h1>
+        <h1 className="text-3xl font-medium mb-8">{t('title')}</h1>
         {(!orders || !Array.isArray(orders) || orders?.length === 0) && (
-          <p className="">You have no orders.</p>
+          <p className="">{t('noOrders')}</p>
         )}
 
         {orders && orders.length > 0 && (

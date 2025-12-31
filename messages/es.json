@@ -168,5 +168,85 @@
     "noResultsMatch": "No hay resultados que coincidan con",
     "selectOption": "Selecciona una opción para ver los planes eSIM disponibles",
     "noPlansAvailable": "No hay planes {tab} disponibles aún."
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "clickHereToReset": "Haz clic aquí para restablecerla",
+      "createAccount": "Crear una cuenta",
+      "continue": "Continuar",
+      "processing": "Procesando",
+      "error": "Hubo un error con las credenciales proporcionadas. Por favor, inténtalo de nuevo.",
+      "validation": {
+        "emailRequired": "El correo electrónico es requerido.",
+        "passwordRequired": "Por favor, proporciona una contraseña."
+      }
+    },
+    "createAccount": {
+      "title": "Crear Cuenta",
+      "emailAddress": "Correo Electrónico",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "createAccount": "Crear Cuenta",
+      "processing": "Procesando",
+      "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+      "login": "Iniciar Sesión",
+      "error": "Hubo un error al crear la cuenta.",
+      "credentialsError": "Hubo un error con las credenciales proporcionadas. Por favor, inténtalo de nuevo.",
+      "validation": {
+        "emailRequired": "El correo electrónico es requerido.",
+        "passwordRequired": "La contraseña es requerida.",
+        "confirmPasswordRequired": "Por favor, confirma tu contraseña.",
+        "passwordsMismatch": "Las contraseñas no coinciden"
+      }
+    }
+  },
+  "account": {
+    "navigation": {
+      "accountSettings": "Configuración de cuenta",
+      "addresses": "Direcciones",
+      "orders": "Pedidos",
+      "logout": "Cerrar sesión"
+    },
+    "settings": {
+      "title": "Configuración de cuenta",
+      "changeDetailsPrompt": "Cambia los detalles de tu cuenta a continuación, o",
+      "clickHere": "haz clic aquí",
+      "toChangePassword": "para cambiar tu contraseña.",
+      "changePasswordPrompt": "Cambia tu contraseña a continuación, o",
+      "cancel": "cancelar",
+      "emailAddress": "Correo Electrónico",
+      "name": "Nombre",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "updateAccount": "Actualizar Cuenta",
+      "changePassword": "Cambiar Contraseña",
+      "processing": "Procesando",
+      "successMessage": "Cuenta actualizada exitosamente.",
+      "errorMessage": "Hubo un problema al actualizar tu cuenta.",
+      "validation": {
+        "emailRequired": "Por favor, proporciona un correo electrónico.",
+        "nameRequired": "Por favor, proporciona un nombre.",
+        "passwordRequired": "Por favor, proporciona una nueva contraseña.",
+        "confirmPasswordRequired": "Por favor, confirma tu nueva contraseña.",
+        "passwordsMismatch": "Las contraseñas no coinciden"
+      }
+    },
+    "recentOrders": {
+      "title": "Pedidos Recientes",
+      "description": "Estos son los pedidos más recientes que has realizado. Cada pedido está asociado con un pago. A medida que realices más pedidos, aparecerán en tu lista de pedidos.",
+      "noOrders": "No tienes pedidos.",
+      "viewAllOrders": "Ver todos los pedidos"
+    },
+    "orders": {
+      "title": "Pedidos",
+      "noOrders": "No tienes pedidos."
+    },
+    "addresses": {
+      "title": "Direcciones"
+    }
   }
 }

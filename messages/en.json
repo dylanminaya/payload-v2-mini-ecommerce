@@ -168,5 +168,85 @@
     "noResultsMatch": "There are no results that match",
     "selectOption": "Select an option to see available eSIM plans",
     "noPlansAvailable": "No {tab} plans available yet."
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot your password?",
+      "clickHereToReset": "Click here to reset it",
+      "createAccount": "Create an account",
+      "continue": "Continue",
+      "processing": "Processing",
+      "error": "There was an error with the credentials provided. Please try again.",
+      "validation": {
+        "emailRequired": "Email is required.",
+        "passwordRequired": "Please provide a password."
+      }
+    },
+    "createAccount": {
+      "title": "Create Account",
+      "emailAddress": "Email Address",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm Password",
+      "createAccount": "Create Account",
+      "processing": "Processing",
+      "alreadyHaveAccount": "Already have an account?",
+      "login": "Login",
+      "error": "There was an error creating the account.",
+      "credentialsError": "There was an error with the credentials provided. Please try again.",
+      "validation": {
+        "emailRequired": "Email is required.",
+        "passwordRequired": "Password is required.",
+        "confirmPasswordRequired": "Please confirm your password.",
+        "passwordsMismatch": "The passwords do not match"
+      }
+    }
+  },
+  "account": {
+    "navigation": {
+      "accountSettings": "Account settings",
+      "addresses": "Addresses",
+      "orders": "Orders",
+      "logout": "Log out"
+    },
+    "settings": {
+      "title": "Account settings",
+      "changeDetailsPrompt": "Change your account details below, or",
+      "clickHere": "click here",
+      "toChangePassword": "to change your password.",
+      "changePasswordPrompt": "Change your password below, or",
+      "cancel": "cancel",
+      "emailAddress": "Email Address",
+      "name": "Name",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "updateAccount": "Update Account",
+      "changePassword": "Change Password",
+      "processing": "Processing",
+      "successMessage": "Successfully updated account.",
+      "errorMessage": "There was a problem updating your account.",
+      "validation": {
+        "emailRequired": "Please provide an email.",
+        "nameRequired": "Please provide a name.",
+        "passwordRequired": "Please provide a new password.",
+        "confirmPasswordRequired": "Please confirm your new password.",
+        "passwordsMismatch": "The passwords do not match"
+      }
+    },
+    "recentOrders": {
+      "title": "Recent Orders",
+      "description": "These are the most recent orders you have placed. Each order is associated with an payment. As you place more orders, they will appear in your orders list.",
+      "noOrders": "You have no orders.",
+      "viewAllOrders": "View all orders"
+    },
+    "orders": {
+      "title": "Orders",
+      "noOrders": "You have no orders."
+    },
+    "addresses": {
+      "title": "Addresses"
+    }
   }
 }
